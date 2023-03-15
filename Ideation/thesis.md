@@ -1,16 +1,11 @@
 # Thesis
 
-Inspired by recent events in the financial system, primarily the run on Silicon Valley Bank (SVB) that caused its collapse, I wanted to analyse the current economic system and research improvements or alternatives. The initial problem statement:
+Inspired by recent events, for example, the collapse of Silicon Valley Bank due to a bank run, I want to analyse the current economic system and research improvements or alternatives based on the digital asset economy and technology with the following initial problem statement:
 
-> A 100% Reserve Banking (100RB) system can address the risks of bank runs and financial instability inherent in Fractional Reserve Banking (FRB) by requiring banks to hold the full amount of customer deposits as reserves. However, the challenge lies in implementing measures that promote economic growth and credit creation at the same level as in the FRB system without compromising financial stability.
+> A 100% Reserve Banking system, to which digital assets (may) belong, can address many of the critical issues in our current fractional reserve banking system by separating bank deposits from credit (loans). The main concern is that such a system could hinder credit creation and economic growth, leading to a lack of research. The question to consider is: How can a digital asset-based system facilitate credit creation, economic growth, and monetary stability at a level comparable to our existing fractional reserve banking system?
 > 
 
-Digital assets, such as cryptocurrencies, tokens, and stablecoins, present a framework of 100% self-sovereign assets that may fulfil the primary requirements of 100RB but without a clear approach on how to promote economic growth and credit creation at the same level of FRB. A more specific problem statement can then be formulated.
-
-> A 100% Reserve Banking (100RB) system using digital assets can address the risks of bank runs and financial instability inherent in Fractional Reserve Banking (FRB). Can we design a framework that utilizes digital assets to promote economic growth and credit creation at the same level as in the Fractional Reserve Banking system without compromising financial stability?
-> 
-
-The specific initial idea can be explored below, but more research must be performed before the problem statement can be transformed into a specific idea. 
+A specific initial idea can be explored in the brainstorming section below, but more research must be performed before the problem statement can be transformed into a specific idea. 
 
 ### Acronyms
 
@@ -60,10 +55,33 @@ The following is a stream-of-consciousness for the purpose of recording/tracking
         - Programmable interest rates can, for example, depend on the price. Making it more or less attractive to take up a new loan, repay existing loans, deposit more into time-locked contracts, or perform other functions in the system that may create balance and stability!
 - Distributing this system over many economies, eventually, all countries in the world, will diversify the underlying value of the token and hence reduce the exposure to economic downturns in specific economics. The token's underlying value then becomes the world's entire economy. No other currency or investment asset can achieve this level of diversification and stability. A true world currency and economic system. → A word stablecoin
 - This system may enable the creation of credit and economic growth in developing countries. 1.4 billion people remain unbanked ([https://www.worldbank.org/en/news/feature/2022/07/21/covid-19-boosted-the-adoption-of-digital-financial-services](https://www.worldbank.org/en/news/feature/2022/07/21/covid-19-boosted-the-adoption-of-digital-financial-services)), and probably many more don’t have access to credit (source?). The system could enable qualified entities in these economies to issue loans with bigger risks and less or no collateral. However, this should probably be only a small part of the larger system to ensure the stability of the token, but still, this might result in massive economic growth of developing countries, reduce inequality, and contribute to many of the UNs Sustainable Development Goals.
-- Working name: Economy StableCoin (ESC), Economy Digital Asset (EDA), Digitial Economy Asset (DEA), Economy Token (ET), Digital Economy Token (DET). A quick google search reveals that DET has the least association, so DET it is!
+- Working name: Economy StableCoin (ESC), Economy Digital Asset (EDA), Digitial Economy Asset (DEA), Economy Token (ET), Digital Economy Token (DET)… Credit or Loan should be part of the name. Credit Token (CT) - clashes with Crypto Twitter, Digital Credit Token (DCT), Loan Token (LT), Credit Economy Token (CET) - that's a timezone, Credit Asset Token (CAT) <3,  Loan Economy Token (LET). Because it's a working name and not a proper name (famous last words), I like the acronym CAT for obvious reasons, so CAT it is!
 - Qualified entities could facilitate the exchange and take on the risk of short-term price fluctuations.
 - Qualified entities must be legally bound to the decentralized system. How can the decentralized system perform legal action against a qualified entity?
 - Voting power in the system must be sufficiently protected against short-term loans that increase voting power for a short time.
+
+**Check-in text:** 
+
+```
+Inspired by recent events, for example, the collapse of Silicon Valley Bank due to a bank run, I want to analyse the current economic system and research improvements or alternatives based on the digital asset economy and technology with the following initial problem statement:
+
+A 100% Reserve Banking system, to which digital assets (may) belong, can address many of the critical issues in our current fractional reserve banking system by separating bank deposits from credit (loans). The main concern is that such a system could hinder credit creation and economic growth, leading to a lack of research. The question to consider is: How can a digital asset-based system facilitate credit creation, economic growth, and monetary stability at a level comparable to our existing fractional reserve banking system?
+
+I will spend more time on the "why" by writing a preliminary research paper draft, but in addition, I want to create a prototype system as the final deliverable. Although it is better to wait, I can't resist coming up with an idea for the problem hehe, so my initial solution is the following:
+
+Credit Asset Token (CAT 🦁). A decentralized system that replaces the role of a central bank with smart contracts. The system issues loans by minting tokens (and potentially using term-locked deposits). The minted principal is burned on repayment to mitigate inflation, and interest is distributed to the loan managers (and depositors). The underlying value of the token is the loan repayment schedule and the collateral for the loans, so low-risk loans such as personal mortgages and business loans are preferred. In this scenario, the token's underlying value is the economy itself. A fully decentralized autonomous loan management system on arbitrary use cases outside the scope of on-chain DeFi is probably not feasible. Qualified Legal Entities, such as banks, must take on the role of loan management within their legal jurisdiction, with strict constraints and legally bound to the rules of the CAT system.  It is critical that the value of the token remains stable at all times. For example, if the token's price goes up, the debtor must pay more for repayments, which is undesirable for the debtor. Automatic interest rate adjustment could be one of the tools to enable stability.
+
+Some cool benefits of the idea
+- The system can be distributed over many different economies, reducing the overall exposure risk to downturns of single economies and leading to global diversification.
+- The management of the CAT system, for example, a CAT DAO, can determine arbitrary rules, for example, that 10% of all new loans over a year must be issued to companies within the fusion industry.
+- Special interest should be put on including developing countries and those without access to financial services (still 1.4B unbanked), for example, by allowing higher risk and less (or none) collateral required on those loans. To ensure stability, it is probably best that this system is only a small part of the bigger system, but it may be more than enough to promote massive economic growth in those economies.
+- The design of this system can probably be adapted to Central Bank Issued Currencies (CBDC).
+- The endgame scenario: A truly global, stable, and permissionless digital asset backed by the world's entire economy that enables stable, sustainable, and fair economic growth.
+**Blockers**: (Still in the ideation/research phase, started late Monday)
+I would love some input on how to test the idea against financial models of real economies. Optimally a simulation-based tool that I could integrate into the testing suite.
+
+Public URL: https://ethglobal.com/showcase/credit-asset-token-cat-kqce9
+```
 
 ## Background
 
