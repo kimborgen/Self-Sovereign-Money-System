@@ -1,11 +1,16 @@
 \documentclass{article}
-\usepackage{cite}
+%\usepackage{cite}
 \usepackage[hidelinks]{hyperref}
+\usepackage[parfill]{parskip}
+\usepackage{biblatex}
+\usepackage[utf8]{inputenc}
+\usepackage{babel,csquotes,xpatch}% recommended
+
 
 \title{Credit Asset Token (CAT) [Working title]}
 \author{Kim Aksel Tahuil Borgen}
 \date{\today}
-
+\addbibresource{thesis.bib}
 \begin{document}
 \maketitle
 \begin{abstract}
@@ -25,8 +30,5 @@ FRB & Fractional Reserve Banking \\
 \end{tabular}
 
 \input{sections/background}
-
-\bibliographystyle{plain}
-\bibliography{thesis}
-
+\printbibliography
 \end{document}
