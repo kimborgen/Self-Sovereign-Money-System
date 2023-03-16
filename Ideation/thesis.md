@@ -1,38 +1,3 @@
-# Thesis
-
-Inspired by recent events, for example, the collapse of Silicon Valley Bank due to a bank run, I want to analyse the current economic system and research improvements or alternatives based on the digital asset economy and technology with the following initial problem statement:
-
-> A 100% Reserve Banking system, to which digital assets (may) belong, can address many of the critical issues in our current fractional reserve banking system by separating bank deposits from credit (loans). The main concern is that such a system could hinder credit creation and economic growth, leading to a lack of research. The question to consider is: How can a digital asset-based system facilitate credit creation, economic growth, and monetary stability at a level comparable to our existing fractional reserve banking system?
-> 
-
-A specific initial idea can be explored in the brainstorming section below, but more research must be performed before the problem statement can be transformed into a specific idea. 
-
-### Acronyms
-
-| Acronym | Definition |
-| --- | --- |
-| FRB | Fractional Reserve Banking |
-| 100RB | 100% Reserve Banking |
-
-### Applicable Documents
-
-| ID | Description | Link |
-| --- | --- | --- |
-| AD |  |  |
-|  |  |  |
-
-### Referenced Documents
-
-| ID | Description |  |
-| --- | --- | --- |
-| RD-1 | Fisher, I. (1936), “100% Money and the Public Debt”, Economic Forum, Spring Number, April-June 1936, 406-420. |  |
-| RD-2 | Phillips, Ronnie J. The Chicago plan & new deal banking reform. ME Sharpe, 1994. |  |
-| RD-3 | This International Monetary Fund working paper revisits the Chicago Plan, using modern economic models to analyze its potential implications and benefits for financial stability and economic performance. | https://www.imf.org/en/Publications/WP/Issues/2016/12/31/The-Chicago-Plan-Revisited-26178         |
-| RD-4 | Swizz 2018 referendum: Popular initiative ‘For crisis-safe money: Money creation by the National Bank only! (Sovereign Money Initiative)’ | https://www.admin.ch/gov/en/start/documentation/votes/20180610/Sovereign-Money-Initiative.html |
-| RD-5 | MONETARY REFORM - A BETTER MONETARY SYSTEM FOR ICELAND | https://www.government.is/media/forsaetisraduneyti-media/media/Skyrslur/monetary-reform.pdf |
-
-## Brainstorming section
-
 The following is a stream-of-consciousness for the purpose of recording/tracking initial ideas and nothing more. No conclusions, quotes, or statements should be extracted from this section. If an idea is valid/applicable it will be worked on and transferred to another place in this thesis. 
 
 - A token system that issues loans by simply minting new tokens. The debtors then pay back over time with interest. The interest goes to the loan issuers (+?), and the principal is burned to counteract the inflationary effect.
@@ -83,23 +48,40 @@ I would love some input on how to test the idea against financial models of real
 Public URL: https://ethglobal.com/showcase/credit-asset-token-cat-kqce9
 ```
 
-## Background
 
-All modern economies in the world rely on Fractional Reserve Banking (FRB). FRB is a system in which banks hold only a fraction of their customers' deposits as reserves and lend out the remaining funds to other customers. This system allows banks to serve as financial intermediaries between savers and borrowers, facilitating efficient capital allocation and promoting economic growth. In addition, fractional reserve banking enables banks to create new money through lending, expand the money supply, provide liquidity to the economy, and support payment services. However, this system also carries inherent risks, such as bank runs and financial instability, which necessitate the implementation of regulations and safeguards by central banks and authorities to maintain financial stability. 
+@article{Chicago,
+author = {Simons, Henry Calvert},
+title = {Rules versus Authorities in Monetary Policy},
+journal = {Journal of Political Economy},
+volume = {44},
+number = {1},
+pages = {1--30},
+year = {1936},
+}
 
-(There are many many problems with FRB, expand on them here)
+@article{ChicagoRevisited,
+author = {Benjamin M. Friedman},
+title = {The Chicago Plan Revisited},
+journal = {Independent Review},
+volume = {17},
+number = {1},
+pages = {71-88},
+year = {2012},
+}
 
-In contrast, a 100% Reserve Banking (100RB) system requires banks to hold the entire amount of their customers' deposits as reserves. In general, this means that banks cannot create new money through lending and act more like safe deposit institutions. The 100% reserve banking system can reduce the risk of bank runs and financial crises but may also constrain credit creation and economic growth. 
+@misc{SwizzInitiative,
+author = {{Federal Council of Switzerland}},
+title = {{Popular initiative "For crisis-safe money: Money creation by the National Bank only!"}},
+howpublished = {\url{https://www.admin.ch/gov/en/start/documentation/votes/20180610/initiative-foerderung-vollgeld.html}},
+year = {2018},
+note = {(Accessed on 03/16/2023)}
+}
 
-Several approaches towards a 100RB system exist:
-
-- The Chicago Plan (RD-1, RD-2), developed by economists during the 1930s, proposes separating monetary and credit functions of the banking system by requiring 100% reserves for deposits and centralizing money issuance. This aims to reduce bank runs, financial crises, and inflation risks while allowing more effective monetary policy management. The plan's key features include a 100% reserve requirement, separating credit and money creation, and government control of money issuance. Critics argue that the plan may constrain credit creation and economic growth.  Fisher (RD-1) claimed the following advantages:
-    1. Much better control of a major source of business cycle fluctuations, sudden
-    increases and contractions of bank credit and of the supply of bank-created money.
-    2. Complete elimination of bank runs. 
-    3. Dramatic reduction of the (net) public debt.
-    4. Dramatic reduction of private debt, as money creation no longer requires simultaneous
-    debt creation.
-- The Chicago Plan Revisited (RD-3) from 2012 revisits the idea within the modern economy of the US and finds support for all of Fisher's (RD-1) claims. Additionally, output gains approach 10%, and steady-state inflation can drop to zero.
-- 2018 Swiss citizens’ (popular) initiative, ‘For crisis-safe money: Money creation by the National Bank only! (Sovereign Money Initiative)’ (RD-4). The initiative was defeated with 442k yes votes and 1379k no votes. The Federal Council and Parliament were against the initiative due to no precedent in any country for this type of system, a radical departure from the current system, which they claim to work well and has taken effective measures to improve financial stability, and that the national bank would receive an undesirable level of power.
-- In the aftermath of the 2008 financial crisis in Iceland, a study on monetary and banking reform (RD-5) was commissioned in 2015 by the prime minister. A Sovereign Money System was strongly considered, but no further action was taken.
+@misc{icelandreport,
+author = {Frosti Sigurjónsson},
+title = {MONETARY REFORM - A BETTER MONETARY SYSTEM FOR ICELAND},
+howpublished = {\url{https://www.government.is/media/forsaetisraduneyti-media/media/Skyrslur/monetary-reform.pdf}},
+month = {march},
+year = {2015},
+note = {(Accessed on 03/16/2023)}
+}
