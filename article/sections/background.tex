@@ -1,19 +1,45 @@
 \section{Background}
-All modern economies in the world rely on Fractional Reserve Banking (FRB). 
-FRB is a system in which banks hold only a fraction of their customers' deposits as reserves and lend out the remaining funds to other customers. 
-This system allows banks to serve as financial intermediaries between savers and borrowers, 
-facilitating efficient capital allocation and promoting economic growth. 
-In addition, fractional reserve banking enables banks to create new money through lending, expand the money supply, provide liquidity to the economy, 
-and support payment services. However, this system also carries inherent risks, such as bank runs and financial instability, 
-which necessitate the implementation of regulations and safeguards by central banks and authorities to maintain financial stability. 
+This section will present the theory behind the current economic system based on Fractional Reserve Banking (FRB), 
+proposed economic systems based on 100\% Reserve Banking (100RB), and the decentralized economic system based on blockchain and cryptography. 
+The section will then discuss their individual issues and compare them to each other.
 
-How much money do banks create trough lending? This money multiplier effect is given by the simplified formula $\frac{1}{Reserve Ratio}$. 
-Pre-2020 large banks in america had a Reserve Ratio of 10\% \cite{FRBinvestopedia} giving a money multiplier of $\frac{1}{0.1}=10$. In this system banks could turn a \$1000 initial depoist into \$10000 by lending out \$900 of the initial depoist, the borrower spends the \$900, and the recipient deposits it back into the bank, which then lends out \$810 of this deposit, and the process continues.
-However this concept is criticized for beeing misleading as several countries does not set a legal reserve requirement \cite{chicagorevisited}, including the USA after 2020 \cite{FRBinvestopedia}. In addition \textcite{chicagorevisited} argue that this multiplier is a myth because when banks ask for reserves, the central bank obliges, leading to banks having almost full control of the money creation process.
 
-(There are many many problems with FRB, expand on them here)
+\subsection{The current system: Fractional Reserve Banking (FRB)}
+All economies in the world use different configurations of the Fractional Reserve Banking (FRB) system. FRB is a system in which commercial banks hold only a fraction of their customers' deposits as reserves at any time. These reserves provide liquidity to satisfy short-term customer withdrawals, short-term obligations, and settle interbank transactions. Commercial banks wants to earn profit on the deposit they hold, so they invest the rest of the deposit in finanical investments such as loans, bonds, or stock. This system allows commercial banks to serve as financial intermediaries between savers and borrowers, where savers get interest on their deposits, borrowers get loans, and commercial banks earns interest and profit from the investments. Commercial banks serve an important function in the modern economy by facilitating this efficient capital allocation, promoting economic growth, and facilitating money transactions. However, this system also carries inherent risks, such as bank runs and financial instability, which necessitate the implementation of regulations and safeguards trough monetary policy by central banks and fiscal policy from authorities to maintain financial stability. 
 
-In contrast, a 100\% Reserve Banking (100RB) system requires banks to hold the entire amount of their customers' deposits as reserves. In general, this means that banks cannot create new money through lending and act more like safe deposit institutions. The 100\% reserve banking system can reduce the risk of bank runs and financial crises but may also constrain credit creation and economic growth. 
+The money multiplier theory is a simple way to illustrate how commercial banking works. The formula is given by $\frac{1}{Reserve Ratio}$. A Reserve Ratio of 10\% gives a money multiplier of $\frac{1}{0.1}=10$. In this system banks could turn a \$1000 initial depoist into \$10000 by lending out \$900 of the initial depoist keeping \$100 in reserve. The borrower spends the \$900, and the recipient deposits it back into the bank. The bank then lends out \$810 of this deposit keeing \$90 in reserve, and the process continues. However this concept is criticized for beeing misleading as several countries does not set a legal reserve requirement \cite{chicagorevisited}, including the USA after the covid pandemic started in 2020 \cite{FRBinvestopedia}. 
+
+There are two schools of toughts on money creation. Endogenous money theory posits that money supply is driven by the demand for loans and credit within the economy, with commercial banks creating money through lending. The central bank's role is to accommodate credit demand by adjusting interest rates. Exogenous money theory asserts that money supply is determined by central banks and governments through open market operations, quantitative easing, and printing physical cash. Commercial banks can create money within the limits set by the central bank. 
+
+\textcite{mcleay2014money} from the central bank of england argue that the former (endegenous) theory is much more prevelalent. Commercial banks are the creators of money. The authors argue that for the money multiplier theory to hold, the amount of reserves must be a binding constraint on lending, and the central bank must directly determine the amount of reserves, however in modern economies (in most cases), central banks do no control the quanity of reserves, but rather implement monetary policy by setting the price of reserves by setting the interest rate. \textcite{chicagorevisited} argue that when commercial banks wants to hold more reserves, the central bank will oblige by giving out a reserve loans to the commerical bank. In effect, this has the consequence that commerical banks can in theory create infinite money trough infinite loans. In practice, this unique privilage is constrained by the profitability on loans and competition in the market. For example, commercial banks have to pay interest on the reserve loans, this interest rate ripples into borrowers loan, where difference on interest rate of the central bank reserve loans and borrowers loans is the profit for commercial bank. Too high rate and borrowers do not want to take on new loans. The central banks interest rate is set by monetary policy.  This web of incentives is much more complex and complicated than can be described here, however it illustrates the issue that commercial banks can missuse their power if they find it profitable. In theory, this power is also limited by regulation and oversight, however regulation usually lags behind the market, and oversight is often very limited by small government budgets, lobbying, and other factors. As an example of where banks missued their power, lets take a look at the great recession of 2008.
+
+In XXXX commercial banks realized that they could pacakge many individual mortages into a well diversified security. They could then earn a lot of money by selling this security, backed by mortages, as a low-risk investement. Not a bad idea, but as time went on, commercial banks and the shadow banking system, continously wanted increased profits on this system, issuing increaslingy risky mortages and manipulating rating agencies to classify the securities to give them the top rating. Then the shadow banking system made the problem much worse by placing massive and risky bets on these securites. The limitations set by regulation and oversight did not succeed in identifiying or stopping this problem neither did the web of incentives and reserve requirements (that the USA had at the time). (source)
+
+- Bailouts and why they incentivize increased risk...
+
+\subsection{Economic theory}
+Quantity Theory of Money (QTM) is an economic theory that suggests there is a direct relationship between the supply of money in an economy and the price level of goods and services. It argues that changes in the money supply will lead to proportional changes in the price level. The theory assumes that the velocity of money (the rate at which money is spent) and the level of real output are constant in the short run. \textcite{fisherQTM} defined the formula for the quantity theory of money as:
+\begin{equation}
+    M \times V = P \times Y
+\end{equation}
+
+Where M is the money supply, V is the velocity of money, P is the price level, and Y is real output. The equation states that the total amount of spending in an economy (MV) is equal to the total value of goods and services produced (PY).
+
+Monetarism is an economic theory that emphasizes the importance of controlling the money supply to manage inflation and stabilize the economy. The theory is mostly associated with the nobel price winning economist Milton Friedman in his work \textcite{friedman2008monetary}. Monetarists argue that central banks should focus on maintaining a steady growth rate of the money supply, rather than using discretionary fiscal policies. Thus, monetarism advocates for a rules-based approach to monetary policy, where central banks consistently and predictably adjust the money supply to achieve economic stability. The k-percent rule proposed by \textcite{friedman2008monetary} states that money supply (M) should grow at a constant annual rate tied to the growth of nominal gross domestic product. 
+
+Monetarists argue the money supply (M) drives the QTM equation. Essentially, alterations in M directly impact and dictate employment, inflation (P), and output (Y). \textcite{friedman2008monetary} assumed that velocity (V) remained constant, but monetarists today consider V to be readily predictable instead \cite{monetarismInvestopedia}. 
+
+
+\subsection{Loans}
+
+Commercial banks issue mortages to borrowers and can then sell these mortages (at a discount??) to an investement company that packages and pools individual mortages into Mortage-Backed Securites (MBS). These securites have a fixed interest rate and monthly payouts based on the repayment of the underlying loans. Essentially banks act as a financial intermediary that lend investors money to homebuyers
+
+% How many loans are sold into MBS? Does banks hold loans anymores? If they don't, how does this affect the creation of money?
+
+
+\subsection{100\% Reserve Banking}
+In contrast, a 100\% Reserve Banking (100RB) system requires banks to hold the entire amount of their customers' deposits as reserves. In general, this means that banks cannot create new money through lending and act more like safe deposit institutions. The 100\% reserve banking system can reduce the risk of bank runs and financial crises but may also constrain credit creation and economic growth.     
+
 
 Several approaches towards a 100RB system exist:
 
@@ -29,3 +55,7 @@ Several approaches towards a 100RB system exist:
         \item 2018 Swiss citizens’ (popular) initiative, ‘For crisis-safe money: Money creation by the National Bank only! (Sovereign Money Initiative)’ \cite{SwizzInitiative}. The initiative was defeated with 442k yes votes and 1379k no votes. The Federal Council and Parliament were against the initiative due to no precedent in any country for this type of system, a radical departure from the current system, which they claim to work well and has taken effective measures to improve financial stability, and that the national bank would receive an undesirable level of power.
         \item In the aftermath of the 2008 financial crisis in Iceland, a study on monetary and banking reform \cite{IcelandReport} was commissioned in 2015 by the prime minister. A Sovereign Money System was strongly considered, but no further action was taken.
 \end{itemize}
+
+\subsection{Sovereign Money System (SMS)}
+
+\subsubsection{The economy of cryptocurrencies and other Decentralized Digital Assets (DDA)}

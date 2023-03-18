@@ -47,3 +47,85 @@ I would love some input on how to test the idea against financial models of real
 
 Public URL: https://ethglobal.com/showcase/credit-asset-token-cat-kqce9
 ```
+
+- what tools do central bank have to control the economy?
+    - Quantitativy Easing 
+    - Interest on reserve 
+    - ... 
+
+- Central banks are called the lenders of last resort. But only to illiquid banks, not insolvent banks. In the start of a bank-run, for example cause by an illiquid bank reserve and no other underlying issue, the bank should be able to get an emergency loan from the CB to increase liquidity and everything goes back to normal. However if the bank is insolvent, due to bad investements and strategy, the CB does not want to give it a loan, and other measures are taken, such as selling the bank to a larger bank. If the bank in question is insolvent, the CB might give it a loan anyways to stop a domino effect.  If the bank is large enough, so called "to-big-to-fail", the CB might to anything to keep it alive, such as can be seen in the recent Credit Sussie Swizz.
+
+- Deposit insurance is great, but the limit is only at 200 in the us and 250 in europe. While this is more than enough for majority of people, this limit also apply to businesses, which hold significantly more. 97\% of the deposits at SVB, a bank for small business and startups, was uninsured. The primary benefit of deposit insurance is to reduce FUD and increase confidence in the system, however since there effectivly is no insurance for businesses, the FUD increases. This causes business to deposit their money to the largest of instiutions where the risk of loosing their deposit is the least. Concentrating and centralizing money into a few extremly large banks. If one of these where to fail, the consequences would be disa. In the great recessions of 2008, the US governemnt stepped in took drastic measures such as lending to insolvent entites and other types of markets, taking ownership of companies, and in general bail-out the companies/banks in trouble. This has the consequence that banks know they are likly to be bailed out if the fuck up. Because there is a high probability of bailout, they can take on more risk and raise their profitability if their bets turn out positive and if their bets turn out negative the governemtn will bail them out. The term "privatizing profit and socializing losses". In the US the FED (CB) also act as the bank regulator to regulate this behaviour, however ....
+Bailing out large banks and enteties makes sense, it is a relativly small price to pay to prevent systemic collapse. People(?) argue that banks and the financial system in geneak creates a very important function in the economy, so in the big generalized picture the cost of bailout vs the benefit of the economic system is massivly worth it. Decentralized Digital Assets DDA presents a system of decentralizing and automating these important functions that create massive benefit in the economic system. If these systems can perform the same important functions, then bailouts may no longer be necesarry. Or if they are still necesarry the bailout will benefit all not just management and shareholders of the bailed out institutions. 
+
+
+- Shadow banks (Unregulated non-bank entites such as hedge funds, investement bans... outside the traditional banking system) lend out more money than the traditional one.
+
+The banking system is highly complex, complicated and intertwined, it is difficult to model, and constantly changing. Making the right decisions is impossible. 
+
+- Challanges in monetary policy 
+    - Quality of data (act before quality data is retrieved and analysed)
+    - Timing (actions take time to affect the economy (6-18 months), situation might have changed when policy takes effect)
+    - Control? 
+
+Few people at the time understood how large the shadown banking system was and how tied it was to the housing market. Bubbles are much easier to see in hignsight not in realtime. The FED has the power to regulate banks, and could have used to to reduce subprime lending, 
+
+The tools that CBs have are limited and affect the entire economy. Applying these tools as responsens to what is happening in parts of the economy will have consequences for the entire economy. More granular tools that can affect these parts should probably be applied, such as increased regulation, quantitative easing(?), and lending? Oooo, lending to specific topics/industries. 
+
+FED options
+- Moneyary discretion (The current)
+- Monetary rule (Suggested)
+Martin Freedman a rule where M1 or M2 grow at a constant rate (ex 3\% similar to gdp). Rules works best when V is constant. But in crisis, V goes down. 
+Other economist
+- Target nominal GDP: (M+V) growing at a constant rate. 
+
+In 2008, the FED doubled the MB in 4 months. 
+
+Monetary policy from central banks. Fiscal policy from governments. 
+
+Because the majority of the tools the governemnt and CBs have available affect the entire economy, these tools should not be used to address positive or negative shocks in specific markets, entities (banks), or x. The goals of the tools such as interest rate, should be to influence and stabilize the entire economy, and other tools should be put to influence and stabilize specifics. The general goal should maybe be then to target nominal GDP growth by keeping the growth rate of M+V in QTM constant. In DDA systems we have to possibility to directly log V and make algortihimc adjustment based on this value. If the system has the ability to expand or reduce M in response to V to keep the sum constant then you could achieve this. However, people will may have the ability to manipulate V. So this is maybe not a good idea. In addtion, economic theory states that V is relativly constant, aka the growth rate of V is 0. Temporary changes in V bounce back to the baseline with time. If V is 0, then M should equal nominal GDP. Nominal GDP is probably 3%. So M (money supply) should increase by 3%. You could make a system where M react to V, altough great care should be put in the design of such a system. 
+
+The limits of fiscal policy. An ideal stimulus 
+- timely
+- targeted 
+- and temporary. 
+
+- Recognition lag
+- Legislation lag
+- Implementation lag
+- Effectivness lag (Takes time for governemnt spending to ripple trough the economy)
+- Solution: Automatic fiscal policy 
+    - For example by automaticly lowering tax rate, when indicators fall
+    - welfare and unemployement insurance (timley and targeted)
+
+Should create a simulation and work on an model of the economy based on emperical evidence and analytic reasoning. A model on the global scale that also includes countries and unions (and later planets :D). This model can be evaluated against evidence and adjusted as the economy changes (as it does).
+Then create simulations and specific models on top of this to perform research.
+Does something like this exist?
+
+Money creation in the modern economy, by bank of england:
+"
+(Money Supply?)
+- This article explains how the majority of money in the modern economy is created by commercial 
+banks making loans. 
+- Money creation in practice differs from some popular misconceptions — banks do not act simply 
+as intermediaries, lending out deposits that savers place with them, and nor do they ‘multiply up’ 
+central bank money to create new loans and deposits. 
+- The amount of money created in the economy ultimately depends on the monetary policy of the 
+central bank. In normal times, this is carried out by setting interest rates. The central bank can 
+also affect the amount of money directly through purchasing assets or ‘quantitative easing’. 
+"
+
+"The bank of england aims to make sure the amount of money creation in the economy is consistent with low and stable inflation. In normal times, the Bank of England implements monetary policy by setting the interest rate on central bank reserves. This then influences a range of in terest rates in the economy, including those on bank loans."
+
+"Quantitative Easing" is inended to boost the amount of money in the economy directly by purchasing assets, mainly from nonbank financial companies. 
+
+in the modern economy, commercial banks are 
+the creators of deposit money. This article explains how, 
+rather than banks lending out deposits that are placed with 
+them, the act of lending creates deposits — the reverse of the 
+sequence typically described in textbooks.(3)
+
+C: However, when new loans are deposited at a bank, the banks depoists will increase, allowing them to lend out more money... So shouldnt the money multiplier effect still hold?
+
+
+a
