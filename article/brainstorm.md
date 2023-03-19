@@ -127,5 +127,6 @@ sequence typically described in textbooks.(3)
 
 C: However, when new loans are deposited at a bank, the banks depoists will increase, allowing them to lend out more money... So shouldnt the money multiplier effect still hold?
 
+A term-locked deposit is turned into a loan, that is spent, and the reciever deposits the money into a term-locked deposit, where it can be loaned out again. So a term-locked deposit still is FRB, but probably better because it lowers the risk of bank-runs... To make it 100RB. term-locked deposits cant exist. To funds for new loans should then come from equity or bonds. Aka if the customer wants extra risk and profit (interest) on their deposit, they must buy a bond. This bond could theoretically be used for payments... Or it can be sold for tokens if the customer wants to withdraw/use the money.  
 
-a
+Giving a decentralized system discretionary power is very complex and would invovle a proper DAO, voting system, management board etc etc. Rule-based power is easy to implement
