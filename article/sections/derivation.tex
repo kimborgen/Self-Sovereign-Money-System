@@ -1,0 +1,172 @@
+\section{Deriving a new system}
+The investor is in this context a person or entity that decided to invest their money by lending it out, for example trough a checking account, term-locked deposit accounts, investment accounts, or equity in a investment fund, in exchange either directly or inderectly for a debt contract from the borrower.
+
+The Fractional Reserve Banking system has resulted in enourmous economic growth, however it has a lot of fundemental and deep issues.
+\begin{itemize}
+    \item Commercial banks leverage customers deposits by only keeping a fraction of the customers deposits in reserve and investing the rest (trough loans, bonds, or stocks). Essentially gambling customers deposits. If the investment decreases, customers may end up loosing their deposits, and a bank-run may be triggered. (In the case of SVB). 
+    \item Even in a "well-functioning" bank, a bank-run can be triggered at any time, for example by external forces such as a bank collapse on the other side of the world. Causing a domino cascade that may lead to a systematic collapse. 
+    \item Deposit insurance is meant to mitigate these issues, but only goes up to \$250k in the US and €250k in Europe, more than enough for most people, but a drop in the ocean for businesses. 
+    \item A bank-run may require the bank to sell their investments early, often with a discount, taking on more losses, further worsening the situation.
+    \item We are beginning to see a centralizing of money into very few, extremly large banks.
+    \item Commercial banks have the theoretical power to create infinite money trough infinite loans, if they determine it is profitable. This power is only limited by a web of incentices on this profitabillity, for example setting the interest rate that the commerical bank has to pay on their reserves at the central bank. This power is also limited by regulation and oversight, that often is not a sufficient tool to limit the industry. 
+    \item Because commercial banks are limited by profitability more than rules, they may be incentivized to find new ways to increase their own profitability at the cost of increased systematic risk. For example when commercial banks started to give out as many mortages as possible without any restrictions in the runup to the great recission of 2008, they did so because the mortages, and the risk they have, could be sold to other banks or financial entites almost immediatly, for instant profit. 
+    \item Because bail-outs, bail-ins or other types of support from the relevent authorites is a necessicity in this system to stop the issues from cascading into a systematic collapse incentivizes commercial banks and other entites to take on increasingly more risk. Especially the "too big to fail" banks are incentivized to take on massive risk for greater profit because they have to be bailed out, there may not be any other options. 
+\end{itemize}
+
+Issues with MBS and CDOs.
+
+Issues with SMS
+
+Issues with crypto/DDAs/SSM
+
+(Self-)Soverign Money Systems address many of the issues of Fractional Reserve Banking by moving more to a 100\% Reserve Banking system. The main driver of the economic growth is the price and availability of credit (loans). (S)SMS have been criticied for increased prices and decreased availability of credit 
+
+Any system with loans will have a money multiplier effect. Even if the loans come 100\% from equity. The recepients of the money from loans can downstream decide to become investors with this money, leading to more loans. The current system relies on maturity transformation, the effect where investors can withdraw their money before the investment has matured, leading to bank-runs and instabilites. It is therefor crucial to put sufficient restrictions and effort into design on this system so that investors cannot cause a bank-run and collapse the system. An effective way to ensure this cannot happen is to no longer rely on maturity transformation and to bind the funds to the maturity of the contract, or in other words, an investor cannot withdraw funds from the system as long as those funds are locked in the financial contracts. If the investor wants to withdraw funds from the system they will have to sell their position in the financial contract.
+
+So lets build our case:
+
+The system must create loans to borrowers. How this happens and types of loans is defered. A loan creates a debt contract with the borrower. This PDCtract debt contract encapsulates every aspect of the loan, including repayements, interest rate, risk, collateral, value of collateral, and every legal document. This debt contract will always have a value based on the info and state in the debt contract. Since this debt contract has a unique value derived by its internal variables, it may have a different value than other similar debt contracts, making it a Non-Fungible Debt Contract. The formule of the value is given by
+
+\begin{equation}
+    v_{DC} = f(X_{DC} = x_{1}, x_{2}, ..., x_{n})
+\end{equation}
+
+Where $V_{DC}$ is the Value of the Debt Contract, $X_{DC}$ is an array of all relevant information $x_{1}, x_{2}, ..., x_{n}$ to the Debt Contract, and $f$ is the process to calculate the value of the debt contract based on all the relevant information. 
+
+This single debt contract is a financial instrument that we can do everything with. It can be used in payements, sold, traded, packaged, or pooled into bigger instruments. If the contract is pooled it will begin to have similarities with Mortage-Backed Securities (MBS) if the debt contracts is mortages and Asset-Backed Securities (ABS) in any other case. For now we will pool all debt contracts into a single variable $PDC$. The value of the $PDC$ is directly given by the value of every debt contract. The formula is given by 
+
+\begin{equation}
+    v_{PDC} = f(X_{v_{DC}} = v_{DC_{1}}, v_{DC_{2}}, ..., v_{DC_{n}} )
+\end{equation}
+
+A key issue with the mortage crisis that led to the great recession of 2008 was the lack of transparrency at each stage of the system. At the end, investors only looked at the final numbers and ratings without looking at the underlying assets. The people who actually looked at the underlying assets could see all of the final numbers and ratings was \textit{dogshit}, \textcite{thebigshort} made a movie from the perspecive of these people and how they uncovered these lies/frauds and took out a short position on what common public sense determined to be the most secure asset class.
+
+One problem is the discretionary power each element in this system has and how disconnected all numbers are. The underlying info and resulting value of the debt contract was not transmitted further up the chain to the end securities and their ratings and values. Each element in the chain had discretionary powers to set the value, info, and rating they deemed accurate. An incompetent, dishonest, or malicious actor in only one of the elements in this chain will result in the wrong value, rating, and info of the end security. 
+
+A single autonoums system should exist to record, track, and manage all relevant info and numbers. All underlying information is put in this system and aggregate values, ratings, and information should be automatically created from this underlying information trough rules, formulas, and other clearly defined processes. Such a system may have three fundamental weaknesses, (1) the creators, managers, and operators of the system can manipulate any part it, (2) actors can manipulate or otherwise submit bad processes, and (3) an actor can submit bad underlying information.
+
+The first isssue (1) can be addressed with a fully open, transparrent, and secure system on an un-manipulatable computing and storage substrate. Blockchain and other Distributed Ledger Technologies present such a substrate. If you can represent the entire system in code and data, and submit this code and data to a DLT, both the code and data is replicated and distributed to every participant of the system, in permissionless and open DLT this can mean everyone in the world. Any participant can see and verify that the system is designed according to the specification, the code is openly executed, and the system verifies that it was executed correctly, and any participant can verify that the code was executed correctly. 
+
+The second issue (2) can be partly addressed by the openness of DLT, anyone can analyse, scrutinize, and verify the process, however this does not mean the the process is objectivly "good". This can be addressed with standardization, simplification, and limitations of what the system does. However, it may be wrong to issue limitations on what can be created, so it may be best to rely on standardization as a communication tool to investors, but allow non-standardized processes, with clear marks.
+
+The third issue (3) is a bit more complex to address. These actors must be legally obligated under strict, explicit, and broad rules to provide accurate and timly information. A strong incentive policy should also exist, however in contrasts to current systems web of incentives that may lag behind the real incentives, legal obligations should be stronger in jurdistrictions with strong and functioning legal systems. In jurdistrictions with questionable legal systems, incentives should be stronger. The actors should be placed under supervision and oversight of a relevant authority, which may employ for example regular audits or other tools to discover incompetent, dishonest, or otherwise malicious behaviour. Please note that the current scope of this paper does not include legal aspect, so it will focus on incentives only, but any real-life system must include strong legal guarantess. 
+
+We now have a system which can issue and manage individual loans and pool them into well diversified securities. 
+
+How much loans should be issued? According to the Quantity Theory of Money and monetarist economic school of tought the money supply in an economy should target the nominal GDP, lets say 3\%. That is that the growth of money creation ($\overrightarrow{M}$) times the growth of velocity of money ($\overrightarrow{V}$) should equal 3\%. For the time beeing we can assume that $\overrightarrow{V}$ remains constant at 0. (We may look at adjusting the formula to respond to changes in $\overrightarrow{V}$ later.). In the current monetary system money creation comes primarly from new loans \cite{chicagorevisited}. In this scenario we assume that a super majority of money creation comes only from this system, and ignore other sources of money creation, so we must investigate how to keep money creation within this system alone to the GDP growth exactly, 3\%. 
+
+Targeting nominal GDP is only one option, meant to keep the system as stable as possible and potentially eliminting business cycles. However money creation can also be set to target the actual demand for new loans. This might align more to the problem statement of this project, to allow for the same price and availability of loans as the current system. Economic schools of tought is not an exact science, and may even not apply to a system based on 100RB, so targeting nominal GDP growth on money creation alone may not work. More resarch and deep analysis is required! But that is out-of-scope for now. 
+
+\textcite{chicagorevisited} argued for a 100\% Reserve Baking system where new loans are funded both by equity and by loans from the central bank that creates the funds for this loan directly. The authors analysed this scenario in depth based on modern economic models of the U.S. economy and found support for all of the original claims in the chigago plan in the 1930s \cite{fisher1936}, and even a 10\% output gain of the economy. 
+
+In Self-Soverign Money Systems there is controlling entity behind the system, however, we can define any kind of system we want with code. We can therfor create a currency, or a token, where the code can create and destroy tokens according to defined rules. This new token can be called $c$.This allows greater control of the stability of the system.
+
+In this system the funds from the new loans should first come from investors that deposit $c$ into an investment account/contract $i_{c}$, if there isnt enough funds to meet the demand for new loans, we can create new tokens $c$ to fund the remaining loans, where the system itself becomes an investor. Very similar to the role of a central bank in SMS. When the system recieves repayments from debt contracts the repayments must be burned to mitigate the inflation. If all the debt contracts mature, all $c$ that was created, was also destroyed. In an end-game scenario, if the demand of loans remain constant over the long-term, the destroyment of repayment from existing debt contracts should balance out the new funds that are created for new loans. If the demand for loans always grows, as it should in a growing economy, then money is effectivly created, as the rate of new funds created for loans outweight the rate of burn of the repayements. 
+
+In this closed-loop system the monetary supply will be given only by the total supply of the token $c_{ts}$. However, real-world systems are not closed, and $v_{PDC}$ can be used as payment or in exchange of any other assets, goods, or services. In theory, since individual debt contracts have different values, they may be classified as Non-Fungible Contract, however, you can also make a system where you sell ownership in an individual debt contracts or ownership in a larger PDCs, essentially making it fungible. In-fact it is difficult to limit others to create synthetic products on top of your own, so better to make it fungible to limit the popularity of synthetic products. Because of this, $v_{PDC}$ can be used as near-moneis and should be counted as a currency in our analysis. The money supply now is given by the formula
+
+\begin{equation}
+    M = c_{ts} + v_{PDC} = c_{0} + c_{NT} - c_{DT} + v_{PDC}
+\end{equation}
+Where $c_{ts}$ is the total supply of the token c, $c_{0}$ is the intial supply of the token, $c_{NT}$ are all the new tokens issued for loans, and $c_{DT}$ is all tokens that has been destroyed. The growth rate is given by:
+
+\begin{equation}
+    \overrightarrow{M} = \overrightarrow{c_{NT}} - \overrightarrow{c_{DT}} + \overrightarrow{v_{PDC}}
+\end{equation}
+
+The question is now how to design a system where $\overrightarrow{M}$ targets nominal GDP, around 3\%.
+\begin{equation}
+    \overrightarrow{M} = GDP = 3\%
+\end{equation}
+
+New loans fully backed by investment contracts $i_{c}$ will increase $v_{PDC}$ only. This is because the tokens still circulate in the system, it even may end up in new loans. New loans fully backed by issuing new tokens will grow both $c_{NT}$ and $v_{PDC}$. The growth of these terms can only be balanced with $\overrightarrow{c_{DT}}$. 
+
+An effective and simple way to influence these terms is to create an interest rate $IR$. A higher interest rate $IR$ will decrease the attractivity of new loans, thus lower the amount of new loans, decreasing $\overrightarrow{c_{NT}} + \overrightarrow{v_{PDC}}$. A higer interest rate will also have the positive consequence that it may incentivize a more rapid repayement of the loans, increasing $\overrightarrow{c_{DT}}$. It also has the negative consequence that the risk of default or missing repayements increase with interest rate, thus resulting in lower $\overrightarrow{v_{PDC}}$. A lower interest rate $IR$ has the exact oposite effect. An interest rate seems like a simple and effective tool to incentivize this process, however great care must be taken in such a design. The equation for interest rate can be given by
+
+\begin{equation}
+    \overrightarrow{M} = y_{1}(IR) \times \overrightarrow{c_{NT}} - y_{2}(IR) \times \overrightarrow{c_{DT}} + y_{3}(IR) \times \overrightarrow{v_{PDC}}
+\end{equation}
+Where $y_{n}(IR)$ are functions of the interest rate that determine the effect $IR$ has on the individual growth rates. 
+
+This equation will also depends on the amount that investors are willing to invest at any given moment. As such investments will not grow $c_{NT}$. However to model this equation we need more specific designs. 
+
+Lets define a phased cycle $\tau$. Breaking it down makes it easier to analyse and communicate. 
+\begin{itemize}
+    \item[$\tau_{0}$] Investors deposit the tokens they want to invest into a shared investment account $SIA$ where the contributions from investors are given by $SIA_{d}$, the d for deposit. At the close of $\tau_{0}$ investors are assigned a percentage $PER_{N=d_{i}}$, where $N=1,2,...,n$ of $SIA_{d}$ according to how much they invested and what the total amount of $SIA_{d}$ was.
+    \item[$\tau_{1}$] Qualified Legal Enitites (QLE) collect applications for debt from people or entites. QLEs determines who should recieve loans with what terms, and creates a preliminary Debt Contract $DC_{pre}$ for each loan.
+    \item[$\tau_{2}$] The Principal Ammount $PA$ of all preliminary Debt Contracts are summed $PA_{\forall DC_{pre}} = \sum_{0}^{n} PA_{DC_{pre}}$. If the size of $SIA_{i}$ is not large enough to fill this $PA_{PDC_{prelim}}$ the system will create new tokens and invest those into $SIA$ so that the contribution from the system is given by $SIA_{s} =  PA_{PDC_{prelim}} - SIA_{d}$. All the funds from $SIA$ are then assigned to every $DC_{pre}$. And the system then assignes a percentage $PER_{0}$ of $SIA$ to itself with $\frac{SIA_{s}}{SIA - SIA_{i}}$ and investors are assigned their individual percentage by $\frac{SIA_{d} \times PER_{N=d_{i}}}{SIA - SIA_{s}}$. The system and the investors are now fully equal, the size and percentage of their respective investments tracked by the $PRE_{n}$ variable. 
+    \item[$\tau_{3}$] All new $DC_{pre}$ are pooled together into a preliminary Pooled Debt Contract $PDC_{pre}$. The value $v_{PDC_{pre}} = f(PDC_{pre})$ is calculated. 
+    \item[$\tau_{4}$] The $PDC_{pre}$ is added to the general $PDC$. All $DC_{pre}$ are activated into active Debt Contracts $DC$ and the funds are released to the borrowers. The value of the old PDC increases exactly by the value of the preliminary PDC, given by $v_{PDC_{new}} = v_{PDC_{old}} + v_{PDC_{pre}}$. The investors (including the system) must now be given a percentage of the $PDC$. The percentage of the $PDC$ can tracked in a token. In fact, the $PDC$ itself can be Fungible Token. The Pooled Debt Contract Token (PDCT). The total amount of token increases by $\frac{v_{PDC_{new}}}{v_{PDC_{pre}}}$ and the new PDCTs are distributed according to $PRE$. The old tokenholders are dilluted so that they see no increase nor decrease in their value. This process is similar to what happens when a company fundraises funds in exchange of newly issued stock. 
+\end{itemize}
+
+The value might increase even more because the $PDC$ grows larger and gets more diversified (TODO). 
+
+One potential issue that new investors now are investing in all existing debt contracts. And vice versa, old investors now are invested in new debt contracts. The quality of these debt contracts might differ due to the evolving nature of the system. Each debt contract might have different terms, regulations, limitations, implementation of debt contracts, etc. However all of these variables and qualities should be accuratly and automatically calculated into a current value. So all else beeing equal, if a new Debt Contract had a slightly higher quality, it should result in a higer value, and the investor should therefor recieve more tokens of the $PDC$. This should therefor not be an issue. If it is, then an alternative system based on many Pooled Debt Contracts should be explored. For example if $\tau$ is set to a week, and the outcome of this process is a completly new, unique, and fully indipendant $PDC$. 
+
+Even if the $v_{PDC}$ grows up to 3\% in value, as defined in the equation x, investors will not see this increase as they get increasingly dilluted. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+Since this system relies on automatic, open, and transparrent code execution, we can build the interest rate $IR$ into the token smart contract to algorithmically determine the interest rate based on all the underlying variables. 
+
+
+
+
+
+
+
+
+
+
+
+New loans then come from a combination of $i_{c}$ and
+
+
+
+So we can create a new currency within the system. 
+
+
+
+
+Is it possible to create a Fungible Contract? So these contracts can be used as payments? 
+
+
+
+
+. How these loans are issued and managed, and the type of loans, is defered. 
+
+These financial contracts 
+
+
+ the owners of the debt contract, in th
+
+
+Who determines the rules of the system
+\begin{itemize}
+    \item Discretionary power (current system)
+    \item Automatic rule-based power
+\end{itemize}
+
+Generalized role of central banks in the current system \cite{Stellinga2021}
+\begin{itemize}
+    \item Inflation stabilized at x=2\%
+    \item Price stability
+    \item Maximizing employement
+    \item Low long-term interest rates
+    \item Financial stability
+    \item efficient and reliable payemnt system
+    \item protecting depositors 
+\end{itemize}
+
+The goal of this system should be to to target nominal GDP by targeting a 3\% increase in money supply each year. It should do this with automatic rule-based power within the smart contract. All other functions are shifted to other entites. 
+
