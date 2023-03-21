@@ -1,4 +1,6 @@
 \section{Deriving a new system}
+\textbf{DISCLAIMER: This section is Work In Progress and symbols are not set in stone and might change as I work on this section!!!}
+
 The investor is in this context a person or entity that decided to invest their money by lending it out, for example trough a checking account, term-locked deposit accounts, investment accounts, or equity in a investment fund, in exchange either directly or inderectly for a debt contract from the borrower.
 
 The Fractional Reserve Banking system has resulted in enourmous economic growth, however it has a lot of fundemental and deep issues.
@@ -90,13 +92,13 @@ Where $y_{n}(IR)$ are functions of the interest rate that determine the effect $
 
 This equation will also depends on the amount that investors are willing to invest at any given moment. As such investments will not grow $c_{NT}$. However to model this equation we need more specific designs. 
 
-Lets define a phased cycle $\tau$. Breaking it down makes it easier to analyse and communicate. 
+Lets define a phased cycle $\tau$, one whole cycle is given by $\tau_{n}$, and individual steps in a cycle is given by $\tau_{n_{j}}$. Breaking it down makes it easier to analyse and communicate. 
 \begin{itemize}
-    \item[$\tau_{0}$] Investors deposit the tokens they want to invest into a shared investment account $SIA$ where the contributions from investors are given by $SIA_{d}$, the d for deposit. At the close of $\tau_{0}$ investors are assigned a percentage $PER_{N=d_{i}}$, where $N=1,2,...,n$ of $SIA_{d}$ according to how much they invested and what the total amount of $SIA_{d}$ was.
-    \item[$\tau_{1}$] Qualified Legal Enitites (QLE) collect applications for debt from people or entites. QLEs determines who should recieve loans with what terms, and creates a preliminary Debt Contract $DC_{pre}$ for each loan.
-    \item[$\tau_{2}$] The Principal Ammount $PA$ of all preliminary Debt Contracts are summed $PA_{\forall DC_{pre}} = \sum_{0}^{n} PA_{DC_{pre}}$. If the size of $SIA_{i}$ is not large enough to fill this $PA_{PDC_{prelim}}$ the system will create new tokens and invest those into $SIA$ so that the contribution from the system is given by $SIA_{s} =  PA_{PDC_{prelim}} - SIA_{d}$. All the funds from $SIA$ are then assigned to every $DC_{pre}$. And the system then assignes a percentage $PER_{0}$ of $SIA$ to itself with $\frac{SIA_{s}}{SIA - SIA_{i}}$ and investors are assigned their individual percentage by $\frac{SIA_{d} \times PER_{N=d_{i}}}{SIA - SIA_{s}}$. The system and the investors are now fully equal, the size and percentage of their respective investments tracked by the $PRE_{n}$ variable. 
-    \item[$\tau_{3}$] All new $DC_{pre}$ are pooled together into a preliminary Pooled Debt Contract $PDC_{pre}$. The value $v_{PDC_{pre}} = f(PDC_{pre})$ is calculated. 
-    \item[$\tau_{4}$] The $PDC_{pre}$ is added to the general $PDC$. All $DC_{pre}$ are activated into active Debt Contracts $DC$ and the funds are released to the borrowers. The value of the old PDC increases exactly by the value of the preliminary PDC, given by $v_{PDC_{new}} = v_{PDC_{old}} + v_{PDC_{pre}}$. The investors (including the system) must now be given a percentage of the $PDC$. The percentage of the $PDC$ can tracked in a token. In fact, the $PDC$ itself can be Fungible Token. The Pooled Debt Contract Token (PDCT). The total amount of token increases by $\frac{v_{PDC_{new}}}{v_{PDC_{pre}}}$ and the new PDCTs are distributed according to $PRE$. The old tokenholders are dilluted so that they see no increase nor decrease in their value. This process is similar to what happens when a company fundraises funds in exchange of newly issued stock. 
+    \item[$\tau_{n_{0}}$] Investors deposit the tokens they want to invest into a shared investment account $SIA$ where the contributions from investors are given by $SIA_{d}$, the d for deposit. At the close of $\tau_{0}$ investors are assigned a percentage $PER_{N=d_{i}}$, where $N=1,2,...,n$ of $SIA_{d}$ according to how much they invested and what the total amount of $SIA_{d}$ was.
+    \item[$\tau_{n_{1}}$] Qualified Legal Enitites (QLE) collect applications for debt from people or entites. QLEs determines who should recieve loans with what terms, and creates a preliminary Debt Contract $DC_{pre}$ for each loan.
+    \item[$\tau_{n_{2}}$] The Principal Ammount $PA$ of all preliminary Debt Contracts are summed $PA_{\forall DC_{pre}} = \sum_{0}^{n} PA_{DC_{pre}}$. If the size of $SIA_{d}$ is not large enough to fill this $PA_{PDC_{prelim}}$ the system will create new tokens and invest those into $SIA$ so that the contribution from the system is given by $SIA_{s} =  PA_{PDC_{prelim}} - SIA_{d}$. All the funds from $SIA$ are then assigned to every $DC_{pre}$. And the system then assignes a percentage $PER_{0}$ of $SIA$ to itself with $\frac{SIA_{s}}{SIA - SIA_{d}}$ and investors are assigned their individual percentage by $\frac{SIA_{d} \times PER_{N=d_{i}}}{SIA - SIA_{s}}$. The system and the investors are now fully equal, the size and percentage of their respective investments tracked by the $PRE_{n}$ variable. 
+    \item[$\tau_{n_{3}}$] All new $DC_{pre}$ are pooled together into a preliminary Pooled Debt Contract $PDC_{pre}$. The value $v_{PDC_{pre}} = f(PDC_{pre})$ is calculated. 
+    \item[$\tau_{n_{4}}$] The $PDC_{pre}$ is added to the general $PDC$. All $DC_{pre}$ are activated into active Debt Contracts $DC$ and the funds are released to the borrowers. The value of the old PDC increases exactly by the value of the preliminary PDC, given by $v_{PDC_{new}} = v_{PDC_{old}} + v_{PDC_{pre}}$. The investors (including the system) must now be given a percentage of the $PDC$. The percentage of the $PDC$ can tracked in a token. In fact, the $PDC$ itself can be Fungible Token. The Pooled Debt Contract Token (PDCT). The total amount of token increases by $\frac{v_{PDC_{new}}}{v_{PDC_{pre}}}$ and the new PDCTs are distributed according to $PRE$. The old tokenholders are dilluted so that they see no increase nor decrease in their value. This process is similar to what happens when a company fundraises funds in exchange of newly issued stock. 
 \end{itemize}
 
 The value might increase even more because the $PDC$ grows larger and gets more diversified (TODO). 
@@ -105,11 +107,61 @@ One potential issue that new investors now are investing in all existing debt co
 
 Even if the $v_{PDC}$ grows up to 3\% in value, as defined in the equation x, investors will not see this increase as they get increasingly dilluted. 
 
+We also have to assume the existence of external forces that influence the willingness to take on new loans and that affect the value of the underyling debt contracts. For example aliens, a solar flare, or a new pandemic, that may cause the amount of new loans to drop significantly. Should the system target a steady 3\% increase each year, so if one year it falls by 3\%, the next year should target $\approx$ 6\% to get back on track? Or should it always target a 3\% annual growth rate every cycle $\tau$ regardless of what happened the last cycles? External forces might have a real impact of GDP, there are temporary losses, for example a small percentage of the workforce might be laid off but businesses, factories, and infrastructure survive, and there are real losses, where factories get destroyed, roads are unusable, and business go bankrupt. Assuming temporary losses are caused by business cycles, they are able to rehire the workforce after a while, this loss can be rectified easily be influencing new loans by lowering interest rate. However a real loss is not easy to fix. New loans can go to other busiensses to build up the missing capabilites of the bankrupt businesses. New loans can be used to buy up bankrupt busiensses to keep them operating. New loans can be used repair road and other infrastructure. So in-fact. We should always target a nominal GDP growth rate year after year. If the GDP falls a lot one year, the next year should compensate to facilitate recovery. In addition, it may be prudent to increase this above the nominal GDP so that the economy can recover faster, however in an automatic system this must be carefully designed to not incentivice business cycles. One idea could be to give a managing council of the system extraordinary power in the event of catastophies to manually influence the interest rate, or other variables in the system, however this is out-of-scope in the current version of the paper. For now me must take into account the full history of the system to ensure we are following the annual GDP growth rate.
+
+%Now we must model $\overrightarrow{M}$ according to the difference in investors and new tokens. Since we have a defined timeperiod $\tau$ we can adjust the interest rate dynamically, either before the Debt Contract are created or after, to be effective for the next batch. Because new money is potentially created within this cycle, it makes sense to also adjust interst rate at the same time, to be applicable for the new loans in this cycle. We now model $\overrightarrow{M}$ in the cycle $\tau$. 
+
+We must introduce a new variable $T_{y}$ that includes all $\tau$ cycles in year $y$. So if one $\tau$ cycle is 1 week long then the lenght $\overline{T_{y}}$ must be 52. Since $M$ grows or shrinks on the end of each cycle $\tau$ the rate of growth will compound over the year. So we have to use the following formula to find the growth target for each cycle
+
+\begin{equation}
+    GDP = \overrightarrow{M_{\tau_{target}}}^{\overline{T_{y}}} \qquad \Rightarrow \qquad \overrightarrow{M_{\tau_{target}}} = \sqrt[\overline{T_{y}}]{GDP}
+\end{equation}
+
+The total money supply target at each cycle $\tau_{n}$ is then given by
+
+\begin{equation}
+    M_{\tau_{n_{target}}} = c_{0} \times \overrightarrow{M_{\tau_{target}}}^{n} = c_{0} \times (\sqrt[\overline{T_{y}}]{GDP})^n 
+\end{equation}
+
+At the end of the cycle $\tau_{n}$, the new total money supply will be given by
+\begin{equation}
+    M_{\tau_{n}} = M_{\tau_{n-1}} + SIA_{s} + v_{PDCT_{n}} - v_{PDCT_{n-1}} - c_{DT_{n}}
+\end{equation}
+
+Now we can derive a simple formula for the interest rate
+
+\begin{equation}
+    IR_{\tau_{n}} = IR_{\tau_{n-1}} + \frac{M_{\tau_{n_{target}}}}{M_{\tau_{n}}} - 1
+\end{equation}
+
+In practice the formula for interest rate should be much more complex, and modelled thourougly. However we now have a starting point. To model a good formula we must know every aspect that is impacted by changing the interest rate. Such as the formula for calcultating the value of the debt contracts.
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+\pagebreak
+DRAFTS:
+
+\begin{equation}
+    \overrightarrow{M_{\tau}} = y_{1}(IR) \times \overrightarrow{c_{NT}} - y_{2}(IR) \times \overrightarrow{c_{DT}} + y_{3}(IR) \times \overrightarrow{v_{PDC}}
+\end{equation}
+Where $M_{\tau}$ is the amount of money created or destroyed in a cycle, and $M_{\tau_{target}}$ is the target amount to create or destroy in a cycle, and $ \overrightarrow{M_{\tau_{target}}}$ is the target growth rate of a cycle. 
+
+
+
+\begin{equation}
+    c_{0} \times \overrightarrow{M_{\tau_{target}}}^{n+1} = c_{0} + c_{NT_{n}} - c_{DT_{n}} + v_{PDC_{n}} + SIA_{s} + v_{PDC_{pre}} - c_{DT_{n+1}}
+\end{equation}
 
 
 
@@ -170,3 +222,6 @@ Generalized role of central banks in the current system \cite{Stellinga2021}
 
 The goal of this system should be to to target nominal GDP by targeting a 3\% increase in money supply each year. It should do this with automatic rule-based power within the smart contract. All other functions are shifted to other entites. 
 
+\begin{equation}
+    GDP = (1+\frac{\overrightarrow{M_{\tau_{target}}}}{\overline{T_{y}}})^{\overline{T_{y}}} - 1
+\end{equation}
