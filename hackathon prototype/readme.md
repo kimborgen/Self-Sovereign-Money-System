@@ -15,3 +15,17 @@ An overview of the relevant smart contracts
 - (optional) Debt Contract Token (DCT): A simple ERC-721 Non-Fungible Token to represent ownership of individual DCs, to be owned by PDC. 
 - Pooled Debt Contract (PDC): A contract that pools together all DC into one contract with related functions to calculate the value, etc. 
 - Pooled Debt Token (PDT): a simple ERC20 token used to represent ownership of Pooled Debt Contracts (PDC). New tokens can be created by the system (SSMS). 
+
+## Out Of scopes
+- Upgradability
+- Governance/managers/real-life owners
+- New standardization, example ERC20Permit (EIP-2612), make a true MVP.
+
+## Plan
+- Only QLEs can make DCs. Make a dirt simple contract that only creates DCs
+- DC, including a very simplified value calculation
+- PLC, activate DCs, defer PDT creation
+- PDC, connect PDT
+- PLC PDT creation
+- Iterate on value calculation
+
