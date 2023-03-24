@@ -176,3 +176,6 @@ Uneureka, I was sleep deprived yesterday... There exists outside forces that wil
 The balance between the system selling existing PDT and savers investing in the PLC for new PDT must be modeled. Out of scope for now. 
 
 Value calculation must be determined, including net present value etc etc 
+
+PIVOT! All updates are done on repayments, (value of debt contract is changed, value of pool is changed, interest rate) and new debt contracts are processed imdeatly (take from PLC, create new SST, update the value of pool, interest rate etc). Merge DC and PDC into one contract. Focus on the value of debt contracts and the pool and issuing new loans, interest rate and so on. Maybe repayements. But defer PDT. 
+

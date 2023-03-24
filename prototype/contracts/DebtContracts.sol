@@ -143,8 +143,38 @@ contract DebtContracts is AccessControl, Ownable, Pausable {
 
     // calculate value
 
-    // calculate how much that needs to be paid
+    /**
+    * @dev Calculates the current value of a debt contract
+    * @param id The ID of the debt contract to calculate the value of
+    * @return The current value of the debt contract
+    */
+    function calculateDebtContractValue(uint256 id) public view returns (uint256) {
+        require(debtContracts[id].activated, "Debt contract is not activated");
 
-    // process a payment from borrower
+        // Calculate the present value of the remaining debt
+        UD60x18 memory presentValue = UD60x18(0);
+        uint256 remainingDebt = debtContracts[id].remainingDebt;
+        uint256 durationLength = debtContracts[id].durationLength;
+        SD59x18 memory interestRate = systemInterestRate.add(debtContracts[id].interestRateMultiplier);
+        for (uint256 i = 0; i < durationLength; i++) {
+            presentValue = presentValue.add(ud.div(1, interestRate.add(sd.fromUint(1))));
+            interestRate = interestRate.mul(sd.fromUint(2)).div(sd.fromUint(3));
+        }
+        presentValue = presentValue.mul(sd.fromUint(remainingDebt));
+
+        // Calculate the value of the collateral, if any
+        uint256 collateralValue = debtContracts[id].collateralValue;
+        if (collateralValue > 0) {
+            uint256 collateralCategory = debtContracts[id].collateralCategory;
+            uint256 collateralValueInWei = ud.mul(collateralValue, ud.fromUint(1 ether));
+            presentValue = presentValue.add(collateralValueInWei.mul(ud.fromUint(collateralCategory)).div(ud.fromUint(100)));
+        }
+
+        return ud.toUint(presentValue);
+    }
+
+    // calculate how much that needs to be paid OUT OF SCOPE
+    
+    // process a payment from borrower OUT OF SCOPE
 
 }
