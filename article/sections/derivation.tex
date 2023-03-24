@@ -164,7 +164,12 @@ If you update the present value of the PDC each time you update the present valu
 
 So each debt contract have to repay exactly $MP$ each time, and then calculate the present value. Extra Minimum Viable Prototype bbby
 
+The $MP$ does not vary with interest, so we can adjust this before and after each repayement 
 
+\begin{equation}
+    MP = \frac{RP \times {IR_{DC}}^{RD}}{RD}
+\end{equation}
+Where RP is the Remaining Principal and RD is the Remaining Duration. A bit better.
 
 
 

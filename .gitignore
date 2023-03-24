@@ -310,3 +310,5 @@ TSWLatexianTemp*
 *.vsix
 
 node_modules/
+
+tst/
