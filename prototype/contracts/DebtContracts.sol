@@ -9,6 +9,7 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "truffle/console.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "./SelfSovereignToken.sol";
 
 // This contract is an MVP, a proper contract would be way more complex
 contract DebtContracts is AccessControl, Ownable, Pausable {
@@ -26,11 +27,11 @@ contract DebtContracts is AccessControl, Ownable, Pausable {
     struct DebtContract {
         bool activated;
         address borrower; // const
-        address qualifiedLegalEntity; // const
-        SD59x18 creditworthiness;
-        SD59x18 loanCategory;
-        SD59x18 collateralCategory; 
-        SD59x18 collateralValue;
+        // address qualifiedLegalEntity; // const
+        //SD59x18 creditworthiness;
+        //SD59x18 loanCategory;
+        //SD59x18 collateralCategory; 
+        //SD59x18 collateralValue;
         // address collateral;
         SD59x18 principalTotal; // The principal at the start of the loan, how much money was borrowed?
         SD59x18 remainingDebt; // the remaining debt
@@ -46,9 +47,14 @@ contract DebtContracts is AccessControl, Ownable, Pausable {
     uint[] public preliminaryDebtContracts;
     SD59x18 public systemInterestRate;
     SD59x18 pooledDebtContractValue;
+
+    SelfSovereignToken SST;
     
-    constructor() {
+    constructor(address _addrSST) {
         pooledDebtContractValue = sd(0);
+        SST = SelfSovereignToken(_addrSST);
+        console.log("Testing console.log");
+        systemInterestRate = sd(0.0024662697723e18);
     }
     /**
     * @dev Pauses the creation of new debt contracts during a tau cycle to process new debt applications
@@ -80,46 +86,49 @@ contract DebtContracts is AccessControl, Ownable, Pausable {
         _grantRole(QLE_ROLE, _qle);
     }
 
-/**
- * @dev Creates a new debt contract and stores it in the `debtContracts` mapping.
- * @param borrower The address of the borrower.
- * @param qualifiedLegalEntity The address of the qualified legal entity.
- * @param creditworthiness The creditworthiness of the borrower, as a SD59x18 number.
- * @param loanCategory The category of the loan, as a SD59x18 number.
- * @param collateralCategory The category of the collateral, as a SD59x18 number.
- * @param collateralValue The value of the collateral, as a SD59x18 number.
- * @param principalTotal The total principal of the loan, as a SD59x18 number.
- * @param totalPaymentPeriods The total number of payment periods for the loan, as a SD59x18 number.
- * @param interestRateMultiplier The interest rate multiplier for the loan, as a SD59x18 number.
- * @return ID nonce of the new debt contract.
- */
-function createDebtContract(
-    address borrower,
-    address qualifiedLegalEntity,
-    SD59x18 creditworthiness,
-    SD59x18 loanCategory,
-    SD59x18 collateralCategory,
-    SD59x18 collateralValue,
-    SD59x18 principalTotal,
-    SD59x18 totalPaymentPeriods,
-    SD59x18 interestRateMultiplier
-) public onlyRole(QLE_ROLE) whenNotPaused returns (uint256) {
-    nonce++;
-    DebtContract storage newDebtContract = debtContracts[nonce];
-    newDebtContract.activated = true;
-    newDebtContract.borrower = borrower;
-    newDebtContract.qualifiedLegalEntity = qualifiedLegalEntity;
-    newDebtContract.creditworthiness = creditworthiness;
-    newDebtContract.loanCategory = loanCategory;
-    newDebtContract.collateralCategory = collateralCategory;
-    newDebtContract.collateralValue = collateralValue;
-    newDebtContract.principalTotal = principalTotal;
-    newDebtContract.remainingDebt = principalTotal;
-    newDebtContract.totalPaymentPeriods = totalPaymentPeriods;
-    newDebtContract.remainingPaymentPeriods = totalPaymentPeriods;
-    newDebtContract.interestRateMultiplier = interestRateMultiplier;
-    return nonce;
-}
+    /**
+    * @dev Creates a new debt contract and stores it in the `debtContracts` mapping.
+    * @param borrower The address of the borrower.
+    * @param principalTotal The total principal of the loan, as a SD59x18 number.
+    * @param totalPaymentPeriods The total number of payment periods for the loan, as a SD59x18 number.
+    * @param interestRateMultiplier The interest rate multiplier for the loan. Will be multiplied with 0.01. So 100% -> 100 (equal to systemInterestRate)
+    * @return ID nonce of the new debt contract.
+    */
+    function createDebtContract(
+        address borrower,
+        int256 principalTotal,
+        int256 totalPaymentPeriods,
+        int256 interestRateMultiplier
+    ) public returns (uint256) {
+        // temp anyone can call it, but only QLEs should be able to call it
+        nonce++;
+        DebtContract storage newDebtContract = debtContracts[nonce];
+        newDebtContract.activated = true;
+        newDebtContract.borrower = borrower;
+        newDebtContract.principalTotal = convert(principalTotal);
+        newDebtContract.remainingDebt = convert(principalTotal);
+        newDebtContract.totalPaymentPeriods = convert(totalPaymentPeriods);
+        newDebtContract.remainingPaymentPeriods = convert(totalPaymentPeriods);
+        newDebtContract.interestRateMultiplier = sd(interestRateMultiplier * 0.01e18);
+        
+        //consoleLogSD("irm", newDebtContract.interestRateMultiplier);
+        //consoleLogSD("aaa", sd(1e18));
+    
+        // create SST token and transfer to borrower
+        uint256 amountToMint = uint256(principalTotal);
+        //console.log("Amount to mint %d", amountToMint);
+        SST.mint(borrower, amountToMint);
+
+        // calculate and add the value to the PDC
+        SD59x18 presentValue = calculateDebtContractValue(nonce);
+        //consoleLogSD(presentValue);
+        newDebtContract.lastPresentValue = presentValue;
+
+        pooledDebtContractValue = pooledDebtContractValue.add(presentValue);
+        consoleLogSD("PDCV", pooledDebtContractValue);
+        // interest rate
+        return nonce;
+    }
 
     /**
     * @dev Processes a specified number of preliminary debt contracts and deletes them from the array
@@ -151,17 +160,27 @@ function createDebtContract(
      */
     function calculateNextPayment(uint256 id) public view returns (bool, SD59x18) {
         DebtContract storage dc = debtContracts[id];
+        
 
         // if the loan has matured, the remaining principal must be paid in its entirity
+        //consoleLogSD("rpp", dc.remainingPaymentPeriods);
         if (dc.remainingPaymentPeriods.lte(sd(0))) {
             return (true, dc.remainingDebt);
         }
 
         // according to the simplified formula in the paper
-        SD59x18 specificInterestRate = systemInterestRate.mul(dc.interestRateMultiplier);
-        SD59x18 nextPayment = dc.remainingDebt.mul(specificInterestRate.pow(dc.remainingPaymentPeriods)).div(dc.remainingPaymentPeriods);
-        SD59x18 _np = nextPayment.ceil();
-        return (false, _np);
+        //consoleLogSD("ssr", systemInterestRate);
+        SD59x18 specificInterestRate = systemInterestRate.mul(dc.interestRateMultiplier).add(convert(1));
+        //consoleLogSD("sir", specificInterestRate);
+        //consoleLogSD("111", convert(1));
+        //consoleLogSD("rpp", dc.remainingPaymentPeriods);
+        //return (false, convert(1));
+        // TODO ADD 1 in formula
+        SD59x18 tmp = specificInterestRate.pow(dc.remainingPaymentPeriods);
+        //consoleLogSD("tmp", tmp);
+        SD59x18 nextPayment = dc.remainingDebt.mul(tmp).div(dc.remainingPaymentPeriods);
+        //consoleLogSD("np", nextPayment);
+        return (false, nextPayment);
     }
 
     /**
@@ -172,19 +191,24 @@ function createDebtContract(
     function calculateDebtContractValue(uint256 id) public view returns (SD59x18) {
         (bool isLast, SD59x18 currentMonthlyPayment) = calculateNextPayment(id);
         // if this is the last payment the value is the next payment
+        //console.log("isLast", isLast);
+        //consoleLogSD("cmp", currentMonthlyPayment);
         if (isLast) {
             return currentMonthlyPayment;
         }
 
         DebtContract storage dc = debtContracts[id];
-        SD59x18 specificInterestRate = systemInterestRate.mul(dc.interestRateMultiplier);
+        SD59x18 specificInterestRate = systemInterestRate.mul(dc.interestRateMultiplier).add(convert(1));
 
         SD59x18 presentValue = sd(0);
         for (uint i = 0; i < uint(convert(dc.remainingPaymentPeriods)); i++) {
-            SD59x18 discountFactor = sd(1e18).add(specificInterestRate).powu(i);
+            SD59x18 discountFactor = specificInterestRate.powu(i);
+            //consoleLogSD("df", discountFactor);
             presentValue = presentValue.add(sd(1e18).div(discountFactor));
+            //consoleLogSD("ipv", presentValue);
         }
         presentValue = presentValue.mul(currentMonthlyPayment);
+        //consoleLogSD("pv", presentValue);
         
         return presentValue;
     }
@@ -225,8 +249,16 @@ function createDebtContract(
             require(dc.remainingPaymentPeriods.eq(sd(0)), "cf 6");
             require(pv.eq(sd(0)), "cf 7");
         }
-        dc.remainingPaymentPeriods = dc.remainingPaymentPeriods.sub(sd(1));
+        dc.remainingPaymentPeriods = dc.remainingPaymentPeriods.sub(sd(1e20));
 
+    }
+
+    function consoleLogSD(SD59x18 n) public view {
+        console.log("converted: %s, original: %d", sdToString(n), n.intoUint256());
+    }
+
+    function consoleLogSD(string memory s, SD59x18 n) public view {
+        console.log(string.concat(s, ", converted: %s, original: %d"), sdToString(n), n.intoUint256());
     }
 
     function sdToString(SD59x18 n) public pure returns (string memory) {

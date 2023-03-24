@@ -17,13 +17,13 @@ contract SelfSovereignMoneySystem {
 
   SD59x18 interestRate;
 
-  constructor(SelfSovereignToken _addrSST, PooledDebtToken _addrPDT, QualifiedLegalEntites _addrQLE, DebtContracts _addrDC) public {
-    SST = _addrSST;
-    PDT = _addrPDT;
-    QLE = _addrQLE;
-    DC = _addrDC;
+  constructor(address _addrSST, address _addrPDT, address _addrQLE, address _addrDC) public {
+    SST = SelfSovereignToken(_addrSST);
+    PDT = PooledDebtToken(_addrPDT);
+    QLE = QualifiedLegalEntites(_addrQLE);
+    DC = DebtContracts(_addrDC);
 
     interestRate = sd(0.03e18); // interest rate of 3% initialy?    
-
   }
+
 }

@@ -11,13 +11,16 @@ module.exports = async function(_deployer) {
   await _deployer.deploy(SST)
   await _deployer.deploy(PDT)
   await _deployer.deploy(QLE)
-  await _deployer.deploy(DC)
   const _SST = await SST.deployed()
+  await _deployer.deploy(DC, _SST.address)
   const _PDT = await PDT.deployed()
   const _QLE = await QLE.deployed()
   const _DC = await DC.deployed()
   await _deployer.deploy(SSMS, _SST.address, _PDT.address, _QLE.address, _DC.address)
   const _SSMS = await SSMS.deployed()
+
+  // Transfer roles
+  await _SST.grantMintRole(_DC.address)
   
   // Transfer owner from account that deployed to the SSMS smart contract
   await _SST.transferOwnership(_SSMS.address)
