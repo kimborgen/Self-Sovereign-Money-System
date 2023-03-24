@@ -148,6 +148,7 @@ contract DebtContracts is AccessControl, Ownable, Pausable {
     * @param id The ID of the debt contract to calculate the value of
     * @return The current value of the debt contract
     */
+    /* Wops I gitted the chatgpt output, plz ignore
     function calculateDebtContractValue(uint256 id) public view returns (uint256) {
         require(debtContracts[id].activated, "Debt contract is not activated");
 
@@ -172,6 +173,7 @@ contract DebtContracts is AccessControl, Ownable, Pausable {
 
         return ud.toUint(presentValue);
     }
+    */
 
     // calculate how much that needs to be paid OUT OF SCOPE
     

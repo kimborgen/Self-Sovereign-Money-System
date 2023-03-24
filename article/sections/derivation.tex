@@ -137,9 +137,32 @@ Now we can derive a simple formula for the interest rate
 In practice the formula for interest rate should be much more complex, and modelled thourougly. However we now have a starting point. To model a good formula we must know every aspect that is impacted by changing the interest rate. Such as the formula for calcultating the value of the debt contracts.
 
 
+How to calculate the value of a debt contract? \textcite{fabozzi2008introduction} argues for a monte-carlo simulation approach, and \textcite{tang2015valuation} argues for similar apporaches. This is an interesting case to implement in smart contract code, but out of scope for this hackathon. The current face value of a debt contract is the remaining principal \cite{FaceValueMBS}. A simple calculation to determine the present value of a debt contract is to use Discounted Cash Flow analysis. Lets take a very simplified assumption that the Monthly each debt contract each month is the original principal times the interest rate on the loan to the power of the duration dividided by the duration. 
 
+\begin{equation}
+    MP = \frac{OP \times {IR_{DC}}^{T_{DC}}}{T_{DC}}
+\end{equation}
 
+The Discounted Cash Flow is then 
 
+\begin{equation}
+    PV_{DC} = DCF(DC) = MP \sum_{i=0}^{RD} \frac{1}{({1+IR_{DC}})^i}
+\end{equation}
+RD is the Remaining Duration in $\tau$
+
+The value of the pool of debt is the sum of all PVs 
+
+\begin{equation}
+    PV_{PDC} = \sum_{0}^{N} PV_{DC_{n}}}
+\end{equation}
+
+If you update the present value of the PDC each time you update the present value of a debt contract
+
+\begin{equation}
+    PV_{PDC} = PV_{PDC} - OldPV_{DC} + NewPV_{DC}
+\end{equation}
+
+So each debt contract have to repay exactly $MP$ each time, and then calculate the present value. Extra Minimum Viable Prototype bbby
 
 
 
@@ -225,3 +248,7 @@ The goal of this system should be to to target nominal GDP by targeting a 3\% in
 \begin{equation}
     GDP = (1+\frac{\overrightarrow{M_{\tau_{target}}}}{\overline{T_{y}}})^{\overline{T_{y}}} - 1
 \end{equation}
+
+
+
+
