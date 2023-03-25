@@ -33,6 +33,7 @@ contract DebtContracts is AccessControl, Ownable, Pausable {
         //SD59x18 collateralCategory; 
         //SD59x18 collateralValue;
         // address collateral;
+        SD59x18 principalOriginal;
         SD59x18 principalTotal; // The principal at the start of the loan, how much money was borrowed?
         SD59x18 remainingDebt; // the remaining debt
         SD59x18 totalPaymentPeriods; // how many months
@@ -115,7 +116,8 @@ contract DebtContracts is AccessControl, Ownable, Pausable {
         //consoleLogSD("aaa", sd(1e18));
     
         // create SST token and transfer to borrower
-        uint256 amountToMint = uint256(principalTotal);
+        uint256 amountToMint = newDebtContract.principalTotal.intoUint256();
+
         //console.log("Amount to mint %d", amountToMint);
         SST.mint(borrower, amountToMint);
 
@@ -158,15 +160,11 @@ contract DebtContracts is AccessControl, Ownable, Pausable {
      * @param id The id of the debt contract to calculate the next payment for
      * @return (isLast, nextPaymentAmount) 
      */
-    function calculateNextPayment(uint256 id) public view returns (bool, SD59x18) {
+    function calculateNextPayment(uint256 id) public view returns (SD59x18) {
         DebtContract storage dc = debtContracts[id];
         
 
-        // if the loan has matured, the remaining principal must be paid in its entirity
-        //consoleLogSD("rpp", dc.remainingPaymentPeriods);
-        if (dc.remainingPaymentPeriods.lte(sd(0))) {
-            return (true, dc.remainingDebt);
-        }
+        
 
         // according to the simplified formula in the paper
         //consoleLogSD("ssr", systemInterestRate);
@@ -176,11 +174,12 @@ contract DebtContracts is AccessControl, Ownable, Pausable {
         //consoleLogSD("rpp", dc.remainingPaymentPeriods);
         //return (false, convert(1));
         // TODO ADD 1 in formula
-        SD59x18 tmp = specificInterestRate.pow(dc.remainingPaymentPeriods);
+        SD59x18 tmp = specificInterestRate.pow(dc.remainingPaymentPeriods.add(convert(1)));
         //consoleLogSD("tmp", tmp);
-        SD59x18 nextPayment = dc.remainingDebt.mul(tmp).div(dc.remainingPaymentPeriods);
+        SD59x18 nextPayment = dc.remainingDebt.mul(tmp).div(dc.remainingPaymentPeriods.add(convert(1)));
         //consoleLogSD("np", nextPayment);
-        return (false, nextPayment);
+
+        return nextPayment;
     }
 
     /**
@@ -189,15 +188,17 @@ contract DebtContracts is AccessControl, Ownable, Pausable {
     * @return The current value of the debt contract
     */
     function calculateDebtContractValue(uint256 id) public view returns (SD59x18) {
-        (bool isLast, SD59x18 currentMonthlyPayment) = calculateNextPayment(id);
+        SD59x18 currentMonthlyPayment = calculateNextPayment(id);
+        DebtContract storage dc = debtContracts[id];
+
         // if this is the last payment the value is the next payment
         //console.log("isLast", isLast);
         //consoleLogSD("cmp", currentMonthlyPayment);
-        if (isLast) {
+        if (dc.remainingPaymentPeriods.lte(sd(0))) {
             return currentMonthlyPayment;
         }
 
-        DebtContract storage dc = debtContracts[id];
+
         SD59x18 specificInterestRate = systemInterestRate.mul(dc.interestRateMultiplier).add(convert(1));
 
         SD59x18 presentValue = sd(0);
@@ -216,41 +217,61 @@ contract DebtContracts is AccessControl, Ownable, Pausable {
     /**
     * @dev Processes a payment for the specified debt contract and sets the present value of the PDC. 
     * @param id The ID of the debt contract to process the payment for.
-    * @param amount The amount of the payment in SST
     */
-    function processPayment(uint256 id, SD59x18 amount) public {
-        // for now imagine that SSTs are being transfered :D
+    function pay(uint256 id) public {
         DebtContract storage dc = debtContracts[id];
+        
+        // you dont actually need to supply an amount, because the next payment will be calculated for you
+        
+        SD59x18 nextPayment = calculateNextPayment(id);
 
-        (bool isLast, SD59x18 nextPayment) = calculateNextPayment(id);
-        require(nextPayment.eq(amount), "The amount was not equal to what should be paid");
+        // add interest rate to remainingDebt
+        SD59x18 specificInterestRate = systemInterestRate.mul(dc.interestRateMultiplier).add(convert(1));
+        //consoleLogSD("sir", specificInterestRate);
+        dc.remainingDebt = dc.remainingDebt.mul(specificInterestRate);
+
+        //consoleLogSD("nextPayment: ", nextPayment);
         if (dc.remainingPaymentPeriods.lte(sd(0))) {
             require(nextPayment.eq(dc.remainingDebt), "catastrophic failure 1");
-            require(isLast, "cf 8");
+            //consoleLogSD("remaining Payment Periods", dc.remainingPaymentPeriods);
         }
 
-
         // decrease principal
-        dc.remainingDebt = dc.remainingDebt.sub(amount);
+        dc.remainingDebt = dc.remainingDebt.sub(nextPayment);
+        //consoleLogSD("remaining Principal", dc.remainingDebt);
+
+        // calculate interest on the remaining principal.
 
         // calculate present value
         SD59x18 pv = calculateDebtContractValue(id);
+        //consoleLogSD("dcv", pv);
 
         // update PDC value
         pooledDebtContractValue = pooledDebtContractValue.add(pv).sub(dc.lastPresentValue);
+        //consoleLogSD("new PDCV", pooledDebtContractValue);
 
         // set old 
         dc.lastPresentValue = pv;
-        dc.lastMonthlyPaymentAmount = amount;
+        dc.lastMonthlyPaymentAmount = nextPayment;
 
         // decrease remaining duration
         if (dc.remainingPaymentPeriods.lte(sd(0))) {
             require(dc.remainingDebt.eq(sd(0)), "cf 5");
             require(dc.remainingPaymentPeriods.eq(sd(0)), "cf 6");
             require(pv.eq(sd(0)), "cf 7");
+            dc.activated = false;
+            //console.log("Last payment hurray!");
+        } else {
+            dc.remainingPaymentPeriods = dc.remainingPaymentPeriods.sub(convert(1));
         }
-        dc.remainingPaymentPeriods = dc.remainingPaymentPeriods.sub(sd(1e20));
 
+        //consoleLogSD("remaining payment periods", dc.remainingPaymentPeriods);
+    
+        //console.log("Burning this", nextPayment.intoUint256());
+        // For now, instead of sending SST to PDT, just burn it. 
+        SST.burnFrom(msg.sender, nextPayment.intoUint256());
+        //console.log("Total supply", SST.totalSupply());
+        //console.log("Balance", SST.balanceOf(msg.sender));
     }
 
     function consoleLogSD(SD59x18 n) public view {

@@ -9,7 +9,9 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 contract SelfSovereignToken is ERC20, ERC20Burnable, Ownable, AccessControl {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     
-    constructor() ERC20("SelfSovereignToken", "SST") {}
+    constructor() ERC20("SelfSovereignToken", "SST") {
+        _grantRole(MINTER_ROLE, msg.sender);
+    }
 
     function grantMintRole(address minter) public onlyOwner{
         _grantRole(MINTER_ROLE, minter);
