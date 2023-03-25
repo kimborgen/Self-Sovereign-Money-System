@@ -4,7 +4,7 @@ var SSMS = artifacts.require("SelfSovereignMoneySystem")
 var QLE = artifacts.require("QualifiedLegalEntites")
 var DC = artifacts.require("DebtContracts")
 
-module.exports = async function(_deployer) {
+module.exports = async function(_deployer, network, accounts) {
   // Use deployer to state migration tasks.
   
   // Deploy all contracts in the system
@@ -29,6 +29,6 @@ module.exports = async function(_deployer) {
   await _QLE.transferOwnership(_SSMS.address)
   await _DC.transferOwnership(_SSMS.address)
 
-  await _SSMS.secondInit()
+  await _SSMS.secondInit(accounts)
   
 };

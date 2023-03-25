@@ -39,14 +39,17 @@ contract SelfSovereignMoneySystem is Ownable, Utils {
 
     // bruh time is wimey, and leap years can leap off a cliff, either way 3 normal years 1 leap year = 1461 days -> 31557600 seconds on average in a year, not counting leap seconds, other bs, and other leap year shenanigans. For a MVP, good enough :D
     //periodicity = 2629800; // 1 month in seconds
-    periodicity = 5; // 5seconds
+    periodicity = 10; // 5seconds
     secondInitRan = false;
   }
   
-  function secondInit() external onlyOwner {
+  function secondInit(address[] calldata airdropDestination) external onlyOwner {
     require(secondInitRan == false);
     c_0 = convert(100000000); // lets say we begin with 100 mill
-    SST.mint(address(this), c_0.intoUint256()); // for now lets mint to this contract
+    SD59x18 toEach = c_0.div(convert(int(airdropDestination.length)));
+    for (uint i = 0; i < airdropDestination.length - 1; i++) {
+      SST.mint(airdropDestination[i], toEach.intoUint256());
+    }
     secondInitRan = true;
   }
 
