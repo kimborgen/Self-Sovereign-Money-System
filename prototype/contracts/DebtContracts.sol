@@ -10,9 +10,11 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "truffle/console.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./SelfSovereignToken.sol";
+import "./SelfSovereignMoneySystem.sol";
+import "./Utils.sol";
 
 // This contract is an MVP, a proper contract would be way more complex
-contract DebtContracts is AccessControl, Ownable, Pausable {
+contract DebtContracts is AccessControl, Ownable, Pausable, Utils {
     //using UD60x18 for uint256;
     //using SD59x18 for int256;
     /*
@@ -47,16 +49,26 @@ contract DebtContracts is AccessControl, Ownable, Pausable {
     mapping(uint256 => DebtContract) debtContracts;
     uint[] public preliminaryDebtContracts;
     SD59x18 public systemInterestRate;
-    SD59x18 pooledDebtContractValue;
+    SD59x18 public pooledDebtContractValue;
 
     SelfSovereignToken SST;
+    SelfSovereignMoneySystem SSMS;
     
+    bool secondInitRan;
     constructor(address _addrSST) {
         pooledDebtContractValue = sd(0);
         SST = SelfSovereignToken(_addrSST);
         console.log("Testing console.log");
         systemInterestRate = sd(0.0024662697723e18);
+        secondInitRan = false;
     }
+
+    function secondInit(address _addrSMSS) external onlyOwner {
+        require(secondInitRan == false);
+        SSMS = SelfSovereignMoneySystem(_addrSMSS);
+        secondInitRan = true;
+    }
+
     /**
     * @dev Pauses the creation of new debt contracts during a tau cycle to process new debt applications
     */
@@ -128,7 +140,10 @@ contract DebtContracts is AccessControl, Ownable, Pausable {
 
         pooledDebtContractValue = pooledDebtContractValue.add(presentValue);
         consoleLogSD("PDCV", pooledDebtContractValue);
-        // interest rate
+
+        // update system interest rate
+        SSMS.updateSystemInterestRate();
+
         return nonce;
     }
 
@@ -162,9 +177,6 @@ contract DebtContracts is AccessControl, Ownable, Pausable {
      */
     function calculateNextPayment(uint256 id) public view returns (SD59x18) {
         DebtContract storage dc = debtContracts[id];
-        
-
-        
 
         // according to the simplified formula in the paper
         //consoleLogSD("ssr", systemInterestRate);
@@ -214,6 +226,7 @@ contract DebtContracts is AccessControl, Ownable, Pausable {
         return presentValue;
     }
 
+    // MISSING: Include time. 
     /**
     * @dev Processes a payment for the specified debt contract and sets the present value of the PDC. 
     * @param id The ID of the debt contract to process the payment for.
@@ -272,18 +285,9 @@ contract DebtContracts is AccessControl, Ownable, Pausable {
         SST.burnFrom(msg.sender, nextPayment.intoUint256());
         //console.log("Total supply", SST.totalSupply());
         //console.log("Balance", SST.balanceOf(msg.sender));
+
+        // update system interest rate
+        SSMS.updateSystemInterestRate();
     }
 
-    function consoleLogSD(SD59x18 n) public view {
-        console.log("converted: %s, original: %d", sdToString(n), n.intoUint256());
-    }
-
-    function consoleLogSD(string memory s, SD59x18 n) public view {
-        console.log(string.concat(s, ", converted: %s, original: %d"), sdToString(n), n.intoUint256());
-    }
-
-    function sdToString(SD59x18 n) public pure returns (string memory) {
-        // first convert to int256, then to uint256, then to string because people hate int256
-        return Strings.toString(uint256(convert(n)));
-    }
 }
