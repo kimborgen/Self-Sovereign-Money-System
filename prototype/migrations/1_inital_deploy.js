@@ -24,11 +24,12 @@ module.exports = async function(_deployer, network, accounts) {
   await _SST.grantMintRole(_SSMS.address)
   
   // Transfer owner from account that deployed to the SSMS smart contract
-  await _SST.transferOwnership(_SSMS.address)
-  await _PDT.transferOwnership(_SSMS.address)
-  await _QLE.transferOwnership(_SSMS.address)
-  await _DC.transferOwnership(_SSMS.address)
+  //await _SST.transferOwnership(_SSMS.address)
+  //await _PDT.transferOwnership(_SSMS.address)
+  //await _QLE.transferOwnership(_SSMS.address)
+  //await _DC.transferOwnership(_SSMS.address)
 
   await _SSMS.secondInit(accounts)
+  console.log("minted to these addresses", accounts);
   
 };

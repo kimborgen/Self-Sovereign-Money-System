@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.19;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
+//import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import { SD59x18, sd, convert } from "@prb/math/src/SD59x18.sol";
 // import { UD60x18, ud } from "@prb/math/src/UD60x18.sol";
@@ -14,7 +14,7 @@ import "./SelfSovereignMoneySystem.sol";
 import "./Utils.sol";
 
 // This contract is an MVP, a proper contract would be way more complex
-contract DebtContracts is AccessControl, Ownable, Pausable, Utils {
+contract DebtContracts is AccessControl, Pausable, Utils {
     //using UD60x18 for uint256;
     //using SD59x18 for int256;
     /*
@@ -51,6 +51,10 @@ contract DebtContracts is AccessControl, Ownable, Pausable, Utils {
     SD59x18 public systemInterestRate;
     SD59x18 public pooledDebtContractValue;
 
+    event DebtContractCreated(uint256 indexed id, address indexed borrower, string principalTotal, string totalPaymentPeriods, string interestRateMultiplier);
+    event PaymentMade(uint256 indexed id, address indexed payer, string paymentAmount, string remainingDebt, string remainingPaymentPeriods, string dcPresentValue, string pdcPresentValue);
+    event UpdatedPooledDebtContractValue(string value);
+
     SelfSovereignToken SST;
     SelfSovereignMoneySystem SSMS;
     
@@ -63,7 +67,7 @@ contract DebtContracts is AccessControl, Ownable, Pausable, Utils {
         secondInitRan = false;
     }
 
-    function secondInit(address _addrSMSS) external onlyOwner {
+    function secondInit(address _addrSMSS) external {
         require(secondInitRan == false);
         SSMS = SelfSovereignMoneySystem(_addrSMSS);
         secondInitRan = true;
@@ -72,14 +76,14 @@ contract DebtContracts is AccessControl, Ownable, Pausable, Utils {
     /**
     * @dev Pauses the creation of new debt contracts during a tau cycle to process new debt applications
     */
-    function pauseSystem() external onlyOwner {
+    function pauseSystem() external {
         _pause();
     }
 
     /**
     * @dev Unpauses the system after the tau cycles finnishes
     */
-    function unpauseSystem() external onlyOwner {
+    function unpauseSystem() external {
         _unpause();
     }
 
@@ -87,7 +91,7 @@ contract DebtContracts is AccessControl, Ownable, Pausable, Utils {
      * @dev Sets the system interest rate
      * @param _systemInterestRate The new system interest rate, in basis points
      */
-    function setSystemInterestRate(SD59x18 _systemInterestRate) external onlyOwner {
+    function setSystemInterestRate(SD59x18 _systemInterestRate) external {
         systemInterestRate = _systemInterestRate;
     }
 
@@ -95,9 +99,11 @@ contract DebtContracts is AccessControl, Ownable, Pausable, Utils {
     * @dev Grants the QLE role to the specified address.
     * @param _qle The address to grant the QLE role to.
     */
-    function grantQLERole(address _qle) external onlyOwner {
+    function grantQLERole(address _qle) external {
         _grantRole(QLE_ROLE, _qle);
     }
+
+    event Debugg(string desc, string s);
 
     /**
     * @dev Creates a new debt contract and stores it in the `debtContracts` mapping.
@@ -124,22 +130,28 @@ contract DebtContracts is AccessControl, Ownable, Pausable, Utils {
         newDebtContract.remainingPaymentPeriods = convert(totalPaymentPeriods);
         newDebtContract.interestRateMultiplier = sd(interestRateMultiplier * 0.01e18);
         
-        //consoleLogSD("irm", newDebtContract.interestRateMultiplier);
-        //consoleLogSD("aaa", sd(1e18));
-    
+        // consoleLogSD("irm", newDebtContract.interestRateMultiplier);
+            
         // create SST token and transfer to borrower
         uint256 amountToMint = newDebtContract.principalTotal.intoUint256();
 
-        //console.log("Amount to mint %d", amountToMint);
+        // consoleLogSD("Amount to mint", newDebtContract.principalTotal);
         SST.mint(borrower, amountToMint);
+
+        
 
         // calculate and add the value to the PDC
         SD59x18 presentValue = calculateDebtContractValue(nonce);
-        //consoleLogSD(presentValue);
+        // consoleLogSD("pv", presentValue);
+        
+
         newDebtContract.lastPresentValue = presentValue;
 
         pooledDebtContractValue = pooledDebtContractValue.add(presentValue);
-        consoleLogSD("PDCV", pooledDebtContractValue);
+        // consoleLogSD("PDCV", pooledDebtContractValue);
+        emit UpdatedPooledDebtContractValue(SDtoString(pooledDebtContractValue));
+
+        emit DebtContractCreated(nonce, borrower, SDtoString(newDebtContract.principalTotal), SDtoString(newDebtContract.totalPaymentPeriods), SDtoString(newDebtContract.interestRateMultiplier));
 
         // update system interest rate
         SSMS.updateSystemInterestRate();
@@ -177,21 +189,50 @@ contract DebtContracts is AccessControl, Ownable, Pausable, Utils {
      */
     function calculateNextPayment(uint256 id) public view returns (SD59x18) {
         DebtContract storage dc = debtContracts[id];
+        return _calculateNextPayment(systemInterestRate, dc.interestRateMultiplier, dc.remainingPaymentPeriods, dc.remainingDebt);
+    }
 
+    function _calculateNextPayment(SD59x18 systemIR, SD59x18 irm, SD59x18 rpp, SD59x18 rd) public view returns (SD59x18) {
         // according to the simplified formula in the paper
         //consoleLogSD("ssr", systemInterestRate);
-        SD59x18 specificInterestRate = systemInterestRate.mul(dc.interestRateMultiplier).add(convert(1));
+        SD59x18 specificInterestRate = _calcSpecificInterestRate(systemIR, irm);
         //consoleLogSD("sir", specificInterestRate);
         //consoleLogSD("111", convert(1));
         //consoleLogSD("rpp", dc.remainingPaymentPeriods);
         //return (false, convert(1));
         // TODO ADD 1 in formula
-        SD59x18 tmp = specificInterestRate.pow(dc.remainingPaymentPeriods.add(convert(1)));
+        // consoleLogSD("rrp + 1", rpp.add(convert(1)));
+        SD59x18 tmp = specificInterestRate.abs().pow(rpp.add(convert(1)));
+        // consoleLogSD("tmp", tmp);
+        if (tmp.eq(sd(0))) {
+            tmp = convert(1);
+        }
+        // consoleLogSD("tmp", tmp);/
         //consoleLogSD("tmp", tmp);
-        SD59x18 nextPayment = dc.remainingDebt.mul(tmp).div(dc.remainingPaymentPeriods.add(convert(1)));
-        //consoleLogSD("np", nextPayment);
+        SD59x18 nextPayment = rd.mul(tmp).div(rpp.add(convert(1)));
+        //SD59x18 nextPayment = sd(0);
+        // consoleLogSD("rd", rd);
+        // consoleLogSD("np", nextPayment);
 
         return nextPayment;
+    }
+
+    function calcSpecificInterestRate(SD59x18 irm) public view returns (SD59x18) {
+        return _calcSpecificInterestRate(systemInterestRate, irm);
+    }
+
+    function _calcSpecificInterestRate(SD59x18 systemIR, SD59x18 irm) public view returns (SD59x18) {
+        // consoleLogSD("irm", irm);
+        // consoleLogSD("systemIR", systemIR);
+        SD59x18 specificInterestRate = systemIR.mul(irm);
+        // consoleLogSD("sir", specificInterestRate);
+        if (specificInterestRate.gt(sd(0))) {
+            specificInterestRate = specificInterestRate.add(convert(1));
+        } else if (specificInterestRate.lt(sd(0))) {
+            specificInterestRate = specificInterestRate.sub(convert(1));
+        }
+        // consoleLogSD("sir2", specificInterestRate);
+        return specificInterestRate;
     }
 
     /**
@@ -211,17 +252,23 @@ contract DebtContracts is AccessControl, Ownable, Pausable, Utils {
         }
 
 
-        SD59x18 specificInterestRate = systemInterestRate.mul(dc.interestRateMultiplier).add(convert(1));
+        SD59x18 specificInterestRate = calcSpecificInterestRate(dc.interestRateMultiplier);
+        // consoleLogSD("sir2", specificInterestRate);
+        if (specificInterestRate.eq(sd(0))) {
+            // console.log("sir 0");
+            return currentMonthlyPayment.mul(dc.remainingPaymentPeriods);
+        }
 
         SD59x18 presentValue = sd(0);
         for (uint i = 0; i < uint(convert(dc.remainingPaymentPeriods)); i++) {
             SD59x18 discountFactor = specificInterestRate.powu(i);
-            //consoleLogSD("df", discountFactor);
+            // consoleLogSD("df", discountFactor);
+            require(discountFactor.neq(sd(0)), "discount factor was 0");
             presentValue = presentValue.add(sd(1e18).div(discountFactor));
-            //consoleLogSD("ipv", presentValue);
+            // consoleLogSD("ipv", presentValue);
         }
         presentValue = presentValue.mul(currentMonthlyPayment);
-        //consoleLogSD("pv", presentValue);
+        // consoleLogSD("pv", presentValue);
         
         return presentValue;
     }
@@ -239,29 +286,29 @@ contract DebtContracts is AccessControl, Ownable, Pausable, Utils {
         SD59x18 nextPayment = calculateNextPayment(id);
 
         // add interest rate to remainingDebt
-        SD59x18 specificInterestRate = systemInterestRate.mul(dc.interestRateMultiplier).add(convert(1));
-        //consoleLogSD("sir", specificInterestRate);
+        SD59x18 specificInterestRate = calcSpecificInterestRate(dc.interestRateMultiplier);
+        // consoleLogSD("sir", specificInterestRate);
         dc.remainingDebt = dc.remainingDebt.mul(specificInterestRate);
 
-        //consoleLogSD("nextPayment: ", nextPayment);
+        // consoleLogSD("nextPayment: ", nextPayment);
         if (dc.remainingPaymentPeriods.lte(sd(0))) {
             require(nextPayment.eq(dc.remainingDebt), "catastrophic failure 1");
-            //consoleLogSD("remaining Payment Periods", dc.remainingPaymentPeriods);
+            // consoleLogSD("remaining Payment Periods", dc.remainingPaymentPeriods);
         }
 
         // decrease principal
         dc.remainingDebt = dc.remainingDebt.sub(nextPayment);
-        //consoleLogSD("remaining Principal", dc.remainingDebt);
+        // consoleLogSD("remaining Principal", dc.remainingDebt);
 
         // calculate interest on the remaining principal.
 
         // calculate present value
         SD59x18 pv = calculateDebtContractValue(id);
-        //consoleLogSD("dcv", pv);
+        // consoleLogSD("dcv", pv);
 
         // update PDC value
         pooledDebtContractValue = pooledDebtContractValue.add(pv).sub(dc.lastPresentValue);
-        //consoleLogSD("new PDCV", pooledDebtContractValue);
+        // consoleLogSD("new PDCV", pooledDebtContractValue);
 
         // set old 
         dc.lastPresentValue = pv;
@@ -273,18 +320,28 @@ contract DebtContracts is AccessControl, Ownable, Pausable, Utils {
             require(dc.remainingPaymentPeriods.eq(sd(0)), "cf 6");
             require(pv.eq(sd(0)), "cf 7");
             dc.activated = false;
-            //console.log("Last payment hurray!");
+            // console.log("Last payment hurray!");
         } else {
             dc.remainingPaymentPeriods = dc.remainingPaymentPeriods.sub(convert(1));
         }
 
-        //consoleLogSD("remaining payment periods", dc.remainingPaymentPeriods);
+        // consoleLogSD("remaining payment periods", dc.remainingPaymentPeriods);
     
-        //console.log("Burning this", nextPayment.intoUint256());
+        // console.log("Burning this", nextPayment.intoUint256());
         // For now, instead of sending SST to PDT, just burn it. 
         SST.burnFrom(msg.sender, nextPayment.intoUint256());
-        //console.log("Total supply", SST.totalSupply());
-        //console.log("Balance", SST.balanceOf(msg.sender));
+        // console.log("Total supply", SST.totalSupply());
+        // console.log("Balance", SST.balanceOf(msg.sender));
+
+         emit PaymentMade(
+            id, 
+            msg.sender, 
+            SDtoString(nextPayment), 
+            SDtoString(dc.remainingDebt), 
+            SDtoString(dc.remainingPaymentPeriods), 
+            SDtoString(pv), 
+            SDtoString(pooledDebtContractValue)
+        );
 
         // update system interest rate
         SSMS.updateSystemInterestRate();
