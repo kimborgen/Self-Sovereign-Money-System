@@ -5,8 +5,6 @@ var _SSMS = artifacts.require("SelfSovereignMoneySystem")
 var _QLE = artifacts.require("QualifiedLegalEntites")
 var _DC = artifacts.require("DebtContracts")
 
-
-
 module.exports = async function() {
     const sleep = ms => new Promise(r => setTimeout(r, ms));
 

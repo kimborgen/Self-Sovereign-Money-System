@@ -6633,10 +6633,16 @@
       "links": {},
       "address": "0x509F059F3813759cEdBcA688B1e69444E2ab6Cc3",
       "transactionHash": "0x1f7c8254a2bcc9fdf7927a89f61727cbb8fc56bc9a9f5d2bfb2fb617cbdacabe"
+    },
+    "42069": {
+      "events": {},
+      "links": {},
+      "address": "0x2F9F02d9378D73e4562f1b5626d2fa66F122cb8e",
+      "transactionHash": "0x8866c3c5bb25254e7362896d9d7c325c18140a919e23f74d358c0b6ced3954ff"
     }
   },
   "schemaVersion": "3.4.13",
-  "updatedAt": "2023-03-26T10:03:53.688Z",
+  "updatedAt": "2023-03-26T12:39:32.638Z",
   "networkType": "ethereum",
   "devdoc": {
     "events": {

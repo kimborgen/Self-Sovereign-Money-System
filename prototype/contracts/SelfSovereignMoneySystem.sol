@@ -50,7 +50,7 @@ contract SelfSovereignMoneySystem is Utils {
 
     // bruh time is wimey, and leap years can leap off a cliff, either way 3 normal years 1 leap year = 1461 days -> 31557600 seconds on average in a year, not counting leap seconds, other bs, and other leap year shenanigans. For a MVP, good enough :D
     //periodicity = 2629800; // 1 month in seconds
-    periodicity = 10; // 5seconds
+    periodicity = 60; // 60seconds
     secondInitRan = false;
   }
   
